@@ -33,7 +33,7 @@ const CHANNELS = [
 ]
 
 const fieldClass =
-  'h-11 w-full rounded-md border border-white/15 bg-white/5 px-3 text-sm text-ink-foreground outline-none transition placeholder:text-ink-foreground/40 focus:border-accent disabled:opacity-50'
+  'h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50'
 
 type FormStep = 'details' | 'otp' | 'success'
 
@@ -62,22 +62,22 @@ export function Contact() {
 
   const otpInputRefs = useRef<Array<HTMLInputElement | null>>([])
 
-  // شمارش معکوس تایمر ارسال مجدد کد تایید
+  // شمارنده معکوس ارسال مجدد کد
   useEffect(() => {
     if (step !== 'otp' || countdown <= 0) return
     const timer = window.setInterval(() => {
-      setCountdown((prev) => (prev > 0 ? prev - 1 : 0))
+      setCountdown((prev) => (prev > 1 ? prev - 1 : 0))
     }, 1000)
     return () => window.clearInterval(timer)
   }, [step, countdown])
 
-  // فوکوس خودکار روی اولین خانه کد تایید هنگام ورود به مرحله OTP
+  // فوکوس خودکار روی اولین خانه OTP هنگام ورود به مرحله دوم
   useEffect(() => {
     if (step === 'otp') {
-      const timeout = window.setTimeout(() => {
+      const id = window.setTimeout(() => {
         otpInputRefs.current[0]?.focus()
       }, 60)
-      return () => window.clearTimeout(timeout)
+      return () => window.clearTimeout(id)
     }
   }, [step])
 
@@ -91,11 +91,13 @@ export function Contact() {
     if (e) e.preventDefault()
 
     const validationError = validateConsultationInput(form)
-    setError(validationError)
-    if (validationError) return
+    if (validationError) {
+      setError(validationError)
+      return
+    }
 
-    setLoading(true)
     setError(null)
+    setLoading(true)
 
     try {
       const response = await fetch('/api/contact/send-otp', {
@@ -105,34 +107,37 @@ export function Contact() {
       })
 
       const data = await response.json()
+
       if (!response.ok || !data.ok) {
         setError(data.error || 'خطا در ارسال کد تایید پیامکی')
         return
       }
 
-      setVerifiedPhone(data.phone || normalizeIranMobile(form.phone) || form.phone)
+      const normalized = data.phone || normalizeIranMobile(form.phone) || form.phone
+      setVerifiedPhone(normalized)
       setOtpToken(data.otpToken)
-      setOtpDigits(Array(OTP_LEN).fill(''))
       setCountdown(data.expiresIn || 120)
+      setOtpDigits(Array(OTP_LEN).fill(''))
       setSandboxCode(data.sandboxCode || null)
       setStep('otp')
-      notify(`کد تایید به شماره ${data.phone} ارسال شد`)
+
+      notify(`کد تایید ۵ رقمی به شماره ${normalized} ارسال شد`)
     } catch {
-      setError('خطا در برقراری ارتباط با سرور؛ لطفاً مجدداً تلاش کنید')
+      setError('خطا در برقراری ارتباط با سرور پیامک. لطفاً اتصال اینترنت خود را بررسی کنید.')
     } finally {
       setLoading(false)
     }
   }
 
-  const submitVerifyOtp = async (codeOverride?: string) => {
-    const code = toEnglishDigits(codeOverride ?? otpDigits.join('')).trim()
+  const submitVerifyOtp = async (overrideCode?: string) => {
+    const code = toEnglishDigits(overrideCode ?? otpDigits.join('')).replace(/\D/g, '')
     if (code.length !== OTP_LEN) {
-      setError('لطفاً کد تایید ۵ رقمی پیامک شده را کامل وارد کنید')
+      setError('لطفاً کد تایید ۵ رقمی را به صورت کامل وارد کنید')
       return
     }
 
-    setLoading(true)
     setError(null)
+    setLoading(true)
 
     try {
       const response = await fetch('/api/contact/verify-otp', {
@@ -147,6 +152,7 @@ export function Contact() {
       })
 
       const data = await response.json()
+
       if (!response.ok || !data.ok) {
         setError(data.error || 'کد تایید وارد شده معتبر نیست')
         return
@@ -173,7 +179,6 @@ export function Contact() {
       return
     }
 
-    // در صورت وارد کردن یا جایگذاری بیش از یک رقم
     if (cleanVal.length > 1) {
       const chars = cleanVal.slice(0, OTP_LEN).split('')
       const next = [...otpDigits]
@@ -268,28 +273,28 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="scroll-mt-16 bg-ink text-ink-foreground">
+    <section id="contact" className="scroll-mt-16 border-t border-border bg-ink text-ink-foreground transition-colors duration-200">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
-          <span className="font-mono text-xs tracking-widest text-accent" dir="ltr">
+          <span className="font-mono text-xs font-bold tracking-widest text-primary dark:text-accent" dir="ltr">
             04 / CONTACT
           </span>
           <h2 className="text-3xl font-extrabold md:text-4xl">مشاوره فنی با مهندسین فرآیند</h2>
-          <p className="max-w-md leading-8 text-ink-foreground/70">
+          <p className="max-w-md leading-8 text-ink-foreground/75">
             برای انتخاب تجهیز مناسب، جایگزینی مدل‌های قدیمی یا بررسی گواهی‌های ضدانفجار با ما در ارتباط باشید.
           </p>
-          <ul className="flex flex-col divide-y divide-white/10 rounded-lg border border-white/10">
+          <ul className="flex flex-col divide-y divide-border rounded-lg border border-border bg-card text-foreground">
             {CHANNELS.map((c) => (
               <li key={c.label}>
                 <a
                   href={c.href}
                   target={c.href.startsWith('http') ? '_blank' : undefined}
                   rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="flex items-center gap-4 px-4 py-3.5 transition hover:bg-white/5"
+                  className="flex items-center gap-4 px-4 py-3.5 transition hover:bg-secondary"
                 >
-                  <c.icon className="size-4 text-accent" aria-hidden />
-                  <span className="text-sm text-ink-foreground/70">{c.label}</span>
-                  <span className="mr-auto font-mono text-sm" dir="ltr">
+                  <c.icon className="size-4 text-primary dark:text-accent" aria-hidden />
+                  <span className="text-sm text-muted-foreground">{c.label}</span>
+                  <span className="mr-auto font-mono text-sm font-semibold" dir="ltr">
                     {c.value}
                   </span>
                 </a>
@@ -298,13 +303,13 @@ export function Contact() {
           </ul>
         </div>
 
-        <div className="flex flex-col justify-between rounded-lg border border-white/10 bg-white/[0.03] p-5 md:p-6">
+        <div className="flex flex-col justify-between rounded-lg border border-border bg-card p-5 text-foreground shadow-sm md:p-6">
           {step === 'details' && (
             <form onSubmit={requestOtp} noValidate className="flex flex-col gap-3.5">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-lg font-bold">فرم درخواست مشاوره</h3>
-                <span className="inline-flex items-center gap-1.5 text-xs text-ink-foreground/60">
-                  <ShieldCheck className="size-3.5 text-accent" aria-hidden />
+                <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <ShieldCheck className="size-3.5 text-primary dark:text-accent" aria-hidden />
                   تایید پیامکی کاوه‌نگار
                 </span>
               </div>
@@ -368,7 +373,7 @@ export function Contact() {
               />
 
               {error && (
-                <p role="alert" className="text-sm text-accent">
+                <p role="alert" className="text-sm font-semibold text-destructive">
                   {error}
                 </p>
               )}
@@ -391,7 +396,7 @@ export function Contact() {
                 )}
               </button>
 
-              <p className="text-xs leading-5 text-ink-foreground/50">
+              <p className="text-xs leading-5 text-muted-foreground">
                 پس از تایید شماره همراه شما با کد ۵ رقمی، خلاصه درخواست مشاوره مستقیماً برای مدیر فنی پیامک می‌شود.
               </p>
             </form>
@@ -406,9 +411,9 @@ export function Contact() {
               noValidate
               className="flex flex-col gap-4"
             >
-              <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
+              <div className="flex items-center justify-between gap-2 border-b border-border pb-3">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="size-5 text-accent" aria-hidden />
+                  <ShieldCheck className="size-5 text-primary dark:text-accent" aria-hidden />
                   <h3 className="text-base font-bold">تایید شماره موبایل</h3>
                 </div>
                 <button
@@ -418,28 +423,28 @@ export function Contact() {
                     setError(null)
                     setStep('details')
                   }}
-                  className="inline-flex items-center gap-1 text-xs text-accent transition hover:underline disabled:opacity-50"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition hover:underline disabled:opacity-50 dark:text-accent"
                 >
                   <ArrowRight className="size-3.5" aria-hidden />
                   ویرایش شماره یا اطلاعات
                 </button>
               </div>
 
-              <div className="flex flex-col gap-1 text-sm text-ink-foreground/80">
+              <div className="flex flex-col gap-1 text-sm text-foreground">
                 <p>
                   کد تایید ۵ رقمی به شماره{' '}
-                  <span className="font-mono font-bold text-accent tabular-nums" dir="ltr">
+                  <span className="font-mono font-bold text-primary tabular-nums dark:text-accent" dir="ltr">
                     {verifiedPhone}
                   </span>{' '}
                   پیامک شد.
                 </p>
-                <p className="text-xs text-ink-foreground/55">
+                <p className="text-xs text-muted-foreground">
                   لطفاً کد دریافت شده را جهت ارسال نهایی درخواست مشاوره به مدیر سایت وارد نمایید.
                 </p>
               </div>
 
               {sandboxCode && (
-                <div className="flex items-center justify-between rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-xs text-ink-foreground">
+                <div className="flex items-center justify-between rounded-md border border-accent/45 bg-accent/15 px-3 py-2 text-xs text-foreground">
                   <span>حالت آزمایشی (بدون کلید کاوه‌نگار) — کد تایید شما:</span>
                   <button
                     type="button"
@@ -448,7 +453,7 @@ export function Contact() {
                       setOtpDigits(digits)
                       void submitVerifyOtp(sandboxCode)
                     }}
-                    className="font-mono text-sm font-bold tracking-widest text-accent underline decoration-dotted underline-offset-4"
+                    className="font-mono text-sm font-bold tracking-widest text-primary underline decoration-dotted underline-offset-4 dark:text-accent"
                     dir="ltr"
                     title="کلیک برای درج خودکار کد"
                   >
@@ -474,22 +479,22 @@ export function Contact() {
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
                     onPaste={handleOtpPaste}
-                    className="h-12 w-11 rounded-md border border-white/20 bg-white/5 text-center font-mono text-lg font-bold text-ink-foreground tabular-nums outline-none transition focus:border-accent focus:bg-white/10 focus:ring-2 focus:ring-accent/25 sm:h-13 sm:w-12"
+                    className="h-12 w-11 rounded-md border border-input bg-background text-center font-mono text-lg font-bold text-foreground tabular-nums outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25 sm:h-13 sm:w-12"
                   />
                 ))}
               </div>
 
               {error && (
-                <p role="alert" className="text-center text-sm text-accent">
+                <p role="alert" className="text-center text-sm font-semibold text-destructive">
                   {error}
                 </p>
               )}
 
-              <div className="flex items-center justify-between text-xs text-ink-foreground/60">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
                 {countdown > 0 ? (
                   <span>
                     ارسال مجدد کد تا{' '}
-                    <strong className="font-mono text-ink-foreground tabular-nums" dir="ltr">
+                    <strong className="font-mono text-foreground tabular-nums" dir="ltr">
                       {formatTimer(countdown)}
                     </strong>{' '}
                     دیگر
@@ -502,7 +507,7 @@ export function Contact() {
                   type="button"
                   disabled={countdown > 0 || loading}
                   onClick={() => void requestOtp()}
-                  className="inline-flex items-center gap-1.5 font-medium text-accent transition hover:underline disabled:cursor-not-allowed disabled:text-ink-foreground/35 disabled:no-underline"
+                  className="inline-flex items-center gap-1.5 font-medium text-primary transition hover:underline disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline dark:text-accent"
                 >
                   <RefreshCw className="size-3.5" aria-hidden />
                   ارسال مجدد کد تایید
@@ -532,39 +537,39 @@ export function Contact() {
           {step === 'success' && (
             <div className="flex flex-col justify-between gap-5 py-2">
               <div className="flex items-start gap-3.5">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary dark:bg-accent/15 dark:text-accent">
                   <CheckCircle2 className="size-5" aria-hidden />
                 </div>
                 <div className="flex flex-col gap-1">
                   <h3 className="text-lg font-bold">درخواست مشاوره با موفقیت ثبت و پیامک شد</h3>
-                  <p className="text-sm leading-6 text-ink-foreground/75">
+                  <p className="text-sm leading-6 text-muted-foreground">
                     شماره همراه شما تایید شد و جزئیات درخواست مشاوره فنی از طریق سامانه پیامکی کاوه‌نگار برای مدیر فروش و فنی دراک ارسال گردید.
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 rounded-md border border-white/10 bg-white/[0.02] p-4 text-xs">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                  <span className="text-ink-foreground/60">کد پیگیری درخواست:</span>
-                  <span className="font-mono font-bold text-accent tabular-nums" dir="ltr">
+              <div className="flex flex-col gap-2 rounded-md border border-border bg-background p-4 text-xs">
+                <div className="flex items-center justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">کد پیگیری درخواست:</span>
+                  <span className="font-mono font-bold text-primary tabular-nums dark:text-accent" dir="ltr">
                     {trackingCode}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-ink-foreground/60">درخواست‌دهنده:</span>
+                  <span className="text-muted-foreground">درخواست‌دهنده:</span>
                   <span>
                     {form.name} {form.company ? `(${form.company})` : ''}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-ink-foreground/60">شماره تایید شده:</span>
+                  <span className="text-muted-foreground">شماره تایید شده:</span>
                   <span className="font-mono tabular-nums" dir="ltr">
                     {verifiedPhone}
                   </span>
                 </div>
                 {form.part && (
                   <div className="flex items-center justify-between">
-                    <span className="text-ink-foreground/60">پارت‌نامبر:</span>
+                    <span className="text-muted-foreground">پارت‌نامبر:</span>
                     <span className="font-mono" dir="ltr">
                       {form.part}
                     </span>
@@ -583,9 +588,9 @@ export function Contact() {
                 <button
                   type="button"
                   onClick={openBackupEmail}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-4 text-xs font-medium text-ink-foreground transition hover:bg-white/10"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border bg-background px-4 text-xs font-medium text-foreground transition hover:bg-secondary"
                 >
-                  <Mail className="size-4 text-accent" aria-hidden />
+                  <Mail className="size-4 text-primary dark:text-accent" aria-hidden />
                   ارسال رونوشت با ایمیل
                 </button>
               </div>
@@ -593,14 +598,14 @@ export function Contact() {
           )}
         </div>
       </div>
-      <footer className="border-t border-white/10">
+      <footer className="border-t border-border bg-card text-foreground">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-6 md:px-8">
-          <div className="flex flex-col items-start justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-4 md:flex-row md:items-center">
+          <div className="flex flex-col items-start justify-between gap-4 rounded-xl border border-border bg-background p-4 md:flex-row md:items-center">
             <div className="flex flex-col gap-1">
-              <span className="text-xs font-bold text-accent">
+              <span className="text-xs font-bold text-primary dark:text-accent">
                 بسته نصبی کامل وردپرس و ووکامرس (آماده نصب روی هاست ایران)
               </span>
-              <span className="text-xs text-ink-foreground/70">
+              <span className="text-xs text-muted-foreground">
                 شامل پوسته اختصاصی با فونت محلی IBM Plex Sans Arabic، افزونه موتور B2B + کاوه‌نگار OTP و فایل CSV محصولات
               </span>
             </div>
@@ -615,21 +620,21 @@ export function Contact() {
               <a
                 href="/wordpress-package/deraak-b2b-engine.zip"
                 download="deraak-b2b-engine.zip"
-                className="inline-flex h-9 items-center gap-1.5 rounded-md border border-white/20 bg-white/10 px-3.5 text-xs font-semibold text-ink-foreground transition hover:bg-white/15"
+                className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-card px-3.5 text-xs font-semibold text-foreground transition hover:border-primary hover:text-primary"
               >
                 دانلود افزونه (deraak-b2b-engine.zip)
               </a>
               <a
                 href="/wordpress-package/sample-deraak-products.csv"
                 download="sample-deraak-products.csv"
-                className="inline-flex h-9 items-center gap-1.5 rounded-md border border-white/15 bg-white/5 px-3 text-xs font-medium text-ink-foreground/85 transition hover:bg-white/10"
+                className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-card px-3 text-xs font-medium text-muted-foreground transition hover:border-primary hover:text-foreground"
               >
                 فایل محصولات (CSV)
               </a>
             </div>
           </div>
 
-          <div className="flex flex-col justify-between gap-2 text-xs text-ink-foreground/50 md:flex-row">
+          <div className="flex flex-col justify-between gap-2 text-xs text-muted-foreground md:flex-row">
             <span>دراک — تأمین ابزار دقیق و اتوماسیون صنعتی (مجهز به تایپوگرافی یکپارچه IBM Plex Sans Arabic)</span>
             <span className="font-mono" dir="ltr">
               Tehran · Asaluyeh

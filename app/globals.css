@@ -157,52 +157,53 @@
   --slate-950: #020617;
 
   /* Light Mode Semantic Mapping */
-  --background: var(--slate-50);
-  --foreground: var(--slate-900);
-  --card: var(--slate-50);
-  --card-foreground: var(--slate-900);
-  --popover: var(--slate-50);
-  --popover-foreground: var(--slate-900);
-  --primary: var(--blue-500);
-  --primary-foreground: var(--slate-50);
-  --secondary: var(--slate-100);
-  --secondary-foreground: var(--slate-800);
-  --muted: var(--slate-100);
-  --muted-foreground: var(--slate-600);
-  --accent: var(--yellow-500);
-  --accent-foreground: var(--yellow-950);
-  --destructive: var(--yellow-800);
-  --border: var(--slate-200);
-  --input: var(--slate-300);
-  --ring: var(--blue-500);
-  --ink: var(--blue-950);
-  --ink-foreground: var(--slate-50);
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --card: #F1F5F9;
+  --card-foreground: #0F172A;
+  --popover: #F8FAFC;
+  --popover-foreground: #0F172A;
+  --primary: #008DFF;
+  --primary-foreground: #F8FAFC;
+  --secondary: #EBF5FF;
+  --secondary-foreground: #002566;
+  --muted: #E2E8F0;
+  --muted-foreground: #475569;
+  --accent: #FFC837;
+  --accent-foreground: #3B2400;
+  --destructive: #8A5E00;
+  --border: #CBD5E1;
+  --input: #CBD5E1;
+  --ring: #008DFF;
+  --ink: #EBF5FF;
+  --ink-foreground: #00143B;
   --radius: 0.5rem;
 }
 
+html.dark,
 .dark,
 [data-theme='dark'] {
   color-scheme: dark;
-  --background: var(--slate-950);
-  --foreground: var(--slate-50);
-  --card: var(--slate-900);
-  --card-foreground: var(--slate-50);
-  --popover: var(--slate-900);
-  --popover-foreground: var(--slate-50);
-  --primary: var(--blue-500);
-  --primary-foreground: var(--slate-50);
-  --secondary: var(--slate-800);
-  --secondary-foreground: var(--slate-100);
-  --muted: var(--slate-800);
-  --muted-foreground: var(--slate-400);
-  --accent: var(--yellow-500);
-  --accent-foreground: var(--yellow-950);
-  --destructive: var(--yellow-400);
-  --border: var(--slate-800);
-  --input: var(--slate-700);
-  --ring: var(--blue-400);
-  --ink: var(--blue-950);
-  --ink-foreground: var(--slate-50);
+  --background: #020617;
+  --foreground: #F8FAFC;
+  --card: #0F172A;
+  --card-foreground: #F8FAFC;
+  --popover: #0F172A;
+  --popover-foreground: #F8FAFC;
+  --primary: #008DFF;
+  --primary-foreground: #F8FAFC;
+  --secondary: #1E293B;
+  --secondary-foreground: #D6EBFF;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #FFC837;
+  --accent-foreground: #3B2400;
+  --destructive: #FFD633;
+  --border: #1E293B;
+  --input: #334155;
+  --ring: #3399FF;
+  --ink: #00143B;
+  --ink-foreground: #F8FAFC;
 }
 
 @layer base {
@@ -237,8 +238,8 @@
 
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgb(112 184 255 / 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(112 184 255 / 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgb(0 141 255 / 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 141 255 / 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 

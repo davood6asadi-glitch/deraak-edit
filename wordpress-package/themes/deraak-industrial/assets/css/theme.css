@@ -120,12 +120,12 @@
 	--color-disabled-bg: var(--slate-200);
 	--color-disabled-fg: var(--slate-400);
 
-	--color-ink: var(--blue-950);
-	--color-ink-surface: var(--blue-900);
-	--color-ink-elevated: var(--blue-800);
-	--color-ink-border: var(--slate-800);
-	--color-ink-fg: var(--slate-50);
-	--color-ink-muted: var(--blue-300);
+	--color-ink: var(--blue-50);
+	--color-ink-surface: var(--slate-100);
+	--color-ink-elevated: var(--blue-100);
+	--color-ink-border: var(--blue-200);
+	--color-ink-fg: var(--blue-950);
+	--color-ink-muted: var(--slate-600);
 
 	--color-status-info-bg: var(--blue-50);
 	--color-status-info-border: var(--blue-300);
@@ -342,10 +342,10 @@ img {
    4. نوار ابزار بالایی، هدر اصلی، تغییر تم (تیره/روشن) و منوی موبایل
    ========================================================================== */
 .deraak-topbar {
-	background-color: var(--slate-950);
-	color: var(--slate-300);
+	background-color: var(--color-surface);
+	color: var(--color-muted-fg);
 	font-size: 0.78rem;
-	border-bottom: 1px solid var(--blue-900);
+	border-bottom: 1px solid var(--color-border);
 	padding: 0.45rem 0;
 }
 
@@ -368,7 +368,7 @@ img {
 .deraak-topbar__sync-link {
 	background: none;
 	border: none;
-	color: var(--yellow-400);
+	color: var(--color-primary);
 	cursor: pointer;
 	font-size: 0.76rem;
 	font-weight: 600;
@@ -376,16 +376,16 @@ img {
 }
 
 .deraak-topbar__sync-link:hover {
-	color: var(--yellow-300);
+	color: var(--color-primary-hover);
 }
 
 .deraak-topbar__phone {
-	color: var(--slate-50);
+	color: var(--color-fg);
 	font-weight: 600;
 }
 
 .deraak-topbar__phone:hover {
-	color: var(--blue-300);
+	color: var(--color-primary);
 }
 
 .deraak-network-badge {
@@ -396,25 +396,25 @@ img {
 	border-radius: 999px;
 	font-size: 0.72rem;
 	font-weight: 600;
-	background: var(--blue-900);
-	color: var(--blue-300);
-	border: 1px solid var(--blue-700);
+	background: var(--color-primary-subtle);
+	color: var(--color-primary-active);
+	border: 1px solid var(--color-primary-border);
 }
 
 .deraak-network-badge.is-offline {
-	background: var(--yellow-950);
-	color: var(--yellow-400);
-	border-color: var(--yellow-700);
+	background: var(--color-status-warn-bg);
+	color: var(--color-status-warn-fg);
+	border-color: var(--color-status-warn-border);
 }
 
 .deraak-header {
 	position: sticky;
 	top: 0;
 	z-index: 40;
-	background-color: var(--blue-950);
+	background-color: var(--color-ink);
 	backdrop-filter: blur(10px);
-	color: var(--slate-50);
-	border-bottom: 1px solid var(--blue-900);
+	color: var(--color-ink-fg);
+	border-bottom: 1px solid var(--color-ink-border);
 }
 
 .deraak-header__inner {
@@ -448,14 +448,14 @@ img {
 .deraak-brand__title {
 	font-weight: 700;
 	font-size: 1rem;
-	color: var(--slate-50);
+	color: var(--color-ink-fg);
 	display: block;
 	line-height: 1.3;
 }
 
 .deraak-brand__subtitle {
 	font-size: 0.72rem;
-	color: var(--blue-300);
+	color: var(--color-ink-muted);
 	display: block;
 }
 
@@ -470,13 +470,13 @@ img {
 }
 
 .deraak-nav__list a {
-	color: var(--slate-200);
+	color: var(--color-ink-fg);
 	padding: 0.35rem 0;
 }
 
 .deraak-nav__list a:hover,
 .deraak-nav__list .current-menu-item > a {
-	color: var(--yellow-400);
+	color: var(--color-primary);
 }
 
 .deraak-header__actions {
@@ -486,9 +486,9 @@ img {
 }
 
 .deraak-theme-toggle {
-	background: var(--blue-900);
-	border: 1px solid var(--blue-800);
-	color: var(--yellow-400);
+	background: var(--color-ink-surface);
+	border: 1px solid var(--color-ink-border);
+	color: var(--color-primary);
 	width: 2.5rem;
 	height: 2.5rem;
 	border-radius: var(--radius-md);
@@ -501,15 +501,15 @@ img {
 }
 
 .deraak-theme-toggle:hover {
-	background: var(--blue-800);
-	border-color: var(--blue-600);
+	background: var(--color-ink-elevated);
+	border-color: var(--color-primary);
 }
 
 .deraak-mobile-toggle {
 	display: none;
-	background: var(--blue-900);
-	border: 1px solid var(--blue-800);
-	color: var(--slate-50);
+	background: var(--color-ink-surface);
+	border: 1px solid var(--color-ink-border);
+	color: var(--color-ink-fg);
 	width: 2.5rem;
 	height: 2.5rem;
 	border-radius: var(--radius-md);
@@ -520,8 +520,8 @@ img {
 
 .deraak-mobile-drawer {
 	display: none;
-	background: var(--blue-950);
-	border-bottom: 1px solid var(--blue-800);
+	background: var(--color-ink);
+	border-bottom: 1px solid var(--color-ink-border);
 	padding: 1rem 1.25rem 1.25rem;
 }
 
@@ -538,8 +538,8 @@ img {
 	display: block;
 	padding: 0.5rem 0.75rem;
 	border-radius: var(--radius-md);
-	background: var(--blue-900);
-	color: var(--slate-100);
+	background: var(--color-ink-surface);
+	color: var(--color-ink-fg);
 }
 
 /* ==========================================================================
@@ -608,14 +608,14 @@ img {
 }
 
 .deraak-btn--ghost-light {
-	background-color: var(--blue-900);
-	border-color: var(--blue-700);
-	color: var(--slate-50);
+	background-color: var(--color-ink-surface);
+	border-color: var(--color-ink-border);
+	color: var(--color-ink-fg);
 }
 
 .deraak-btn--ghost-light:hover:not(:disabled) {
-	background-color: var(--blue-800);
-	border-color: var(--blue-500);
+	background-color: var(--color-ink-elevated);
+	border-color: var(--color-primary);
 }
 
 .deraak-btn--full {
@@ -637,16 +637,16 @@ img {
 .deraak-hero {
 	position: relative;
 	overflow: hidden;
-	background: linear-gradient(135deg, var(--blue-950) 0%, var(--blue-900) 60%, var(--slate-900) 100%);
-	color: var(--slate-50);
-	border-bottom: 1px solid var(--blue-800);
+	background: linear-gradient(135deg, var(--color-ink) 0%, var(--color-ink-surface) 100%);
+	color: var(--color-ink-fg);
+	border-bottom: 1px solid var(--color-ink-border);
 	padding: 3.5rem 0 4rem;
 }
 
 .deraak-hero__glow {
 	position: absolute;
 	inset: 0;
-	background: radial-gradient(circle at 20% 20%, rgba(0, 141, 255, 0.22), rgba(255, 200, 55, 0.1) 40%, transparent 70%);
+	background: radial-gradient(circle at 20% 20%, rgba(0, 141, 255, 0.16), rgba(255, 200, 55, 0.08) 40%, transparent 70%);
 	pointer-events: none;
 }
 
@@ -664,9 +664,9 @@ img {
 	gap: 0.5rem;
 	padding: 0.35rem 0.85rem;
 	border-radius: var(--radius-sm);
-	background: var(--blue-900);
-	border: 1px solid var(--blue-700);
-	color: var(--yellow-400);
+	background: var(--color-ink-surface);
+	border: 1px solid var(--color-ink-border);
+	color: var(--color-primary);
 	font-size: 0.78rem;
 	font-weight: 600;
 	margin-bottom: 1.25rem;
@@ -674,14 +674,14 @@ img {
 
 .deraak-hero__title {
 	font-size: clamp(1.75rem, 3.2vw, 2.75rem);
-	color: var(--slate-50);
+	color: var(--color-ink-fg);
 	line-height: 1.3;
 	margin-bottom: 1rem;
 }
 
 .deraak-hero__lead {
 	font-size: 1rem;
-	color: var(--slate-200);
+	color: var(--color-ink-muted);
 	max-width: 640px;
 	margin-bottom: 1.75rem;
 }
@@ -697,27 +697,27 @@ img {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 0.85rem;
-	border-top: 1px solid var(--blue-800);
+	border-top: 1px solid var(--color-ink-border);
 	padding-top: 1.5rem;
 }
 
 .deraak-hero__stat-label {
 	font-size: 0.75rem;
-	color: var(--blue-300);
+	color: var(--color-ink-muted);
 	display: block;
 }
 
 .deraak-hero__stat-value {
 	font-size: 0.95rem;
 	font-weight: 700;
-	color: var(--slate-50);
+	color: var(--color-ink-fg);
 	margin-top: 0.2rem;
 	display: block;
 }
 
 .deraak-hero__card {
-	background: var(--blue-900);
-	border: 1px solid var(--blue-700);
+	background: var(--color-ink-surface);
+	border: 1px solid var(--color-ink-border);
 	border-radius: var(--radius-xl);
 	padding: 1.5rem;
 	box-shadow: var(--shadow-elevated);
