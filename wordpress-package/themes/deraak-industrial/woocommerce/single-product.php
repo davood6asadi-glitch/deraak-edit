@@ -1,162 +1,250 @@
 <?php
 /**
- * WooCommerce Single Product Template
- * Native Fallback - 100% usable without Elementor Pro
+ * The Template for displaying all single products (Technical Datasheet B2B Layout)
  *
  * @package Deraak_Industrial
+ * @version 8.6.0
  */
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined( 'ABSPATH' ) || exit;
 
-get_header(); ?>
+get_header( 'shop' );
 
-<div class="derak-container" style="padding-top: 20px; padding-bottom: 60px;">
+while ( have_posts() ) :
+	the_post();
+	global $product;
 
-    <?php
-    while (have_posts()) :
-        the_post();
-        global $product;
-        $post_id   = get_the_ID();
-        $sku       = $product ? $product->get_sku() : '';
-        $tag       = deraak_get_meta($post_id, '_derak_product_tag', 'INDUSTRIAL');
-        $lead_time = deraak_get_meta($post_id, '_derak_lead_time', 'تحویل فوری انبار تهران');
+	$product_id    = $product->get_id();
+	$sku           = $product->get_sku();
+	$model_code    = get_post_meta( $product_id, '_deraak_model_code', true );
+	$lead_time     = get_post_meta( $product_id, '_deraak_lead_time', true );
+	$datasheet_url = get_post_meta( $product_id, '_deraak_datasheet_url', true );
+	$apps_raw      = get_post_meta( $product_id, '_deraak_applications', true );
+	$specs_raw     = get_post_meta( $product_id, '_deraak_specs_json', true );
 
-        $brands     = get_the_terms($post_id, 'product_brand');
-        $brand_name = (!empty($brands) && !is_wp_error($brands)) ? $brands[0]->name : 'Deraak';
+	$specs = ! empty( $specs_raw ) ? json_decode( $specs_raw, true ) : array();
+	if ( ! is_array( $specs ) ) {
+		$specs = array();
+	}
 
-        // Tech specs
-        $spec_proto = deraak_get_meta($post_id, '_derak_spec_protocol');
-        $spec_sup   = deraak_get_meta($post_id, '_derak_spec_supply');
-        $spec_acc   = deraak_get_meta($post_id, '_derak_spec_accuracy');
-        $spec_cert  = deraak_get_meta($post_id, '_derak_spec_certification');
-        $spec_temp  = deraak_get_meta($post_id, '_derak_spec_temp');
-        $spec_press = deraak_get_meta($post_id, '_derak_spec_pressure');
-        ?>
+	// ادغام ویژگی‌های استاندارد ووکامرس در صورت خالی بودن جدول JSON
+	if ( empty( $specs ) ) {
+		foreach ( $product->get_attributes() as $attribute ) {
+			$name  = wc_attribute_label( $attribute->get_name() );
+			$value = $product->get_attribute( $attribute->get_name() );
+			if ( $name && $value ) {
+				$specs[] = array(
+					'key'   => $name,
+					'value' => $value,
+				);
+			}
+		}
+	}
 
-        <!-- Breadcrumbs -->
-        <nav style="font-size:12px; color:var(--derak-stone-muted); margin-bottom:16px;">
-            <a href="<?php echo esc_url(home_url('/')); ?>" style="color:var(--derak-stone-muted); text-decoration:none;">خانه</a> / 
-            <a href="<?php echo esc_url(function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop')); ?>" style="color:var(--derak-stone-muted); text-decoration:none;">کاتالوگ</a> / 
-            <span style="color:var(--derak-primary); font-weight:700;"><?php the_title(); ?></span>
-        </nav>
+	$brands        = wp_get_post_terms( $product_id, 'product_brand' );
+	$brand_name    = ( ! is_wp_error( $brands ) && ! empty( $brands ) ) ? $brands[0]->name : 'Deraak';
+	$brand_country = ( ! is_wp_error( $brands ) && ! empty( $brands ) ) ? get_term_meta( $brands[0]->term_id, '_deraak_brand_country', true ) : '';
 
-        <div class="derak-single-layout">
-            <!-- Left: Product Image & Badges -->
-            <div class="derak-single-gallery">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                    <span class="derak-card-brand" dir="ltr" style="font-size:14px; font-weight:700;"><?php echo esc_html($brand_name); ?></span>
-                    <?php deraak_render_stock_badge($post_id); ?>
-                </div>
+	$cats     = wp_get_post_terms( $product_id, 'product_cat' );
+	$cat_name = ( ! is_wp_error( $cats ) && ! empty( $cats ) ) ? $cats[0]->name : 'تجهیزات ابزار دقیق';
+	$cat_link = ( ! is_wp_error( $cats ) && ! empty( $cats ) ) ? get_term_link( $cats[0] ) : '';
 
-                <div style="position:relative; background-color:var(--derak-blue-ice); border-radius:12px; padding:20px; border:1px solid var(--derak-blue-periwinkle);">
-                    <?php
-                    if (has_post_thumbnail()) {
-                        the_post_thumbnail('large', array('class' => 'derak-single-img'));
-                    } else {
-                        echo '<img src="' . esc_url(DERAAK_THEME_URI . '/assets/images/icon.svg') . '" class="derak-single-img" alt="' . esc_attr(get_the_title()) . '" />';
-                    }
-                    ?>
-                    <span class="derak-card-tag" dir="ltr" style="font-size:11px; padding:4px 8px;"><?php echo esc_html($tag); ?></span>
-                </div>
+	$img_url = function_exists( 'deraak_get_product_image_url' )
+		? deraak_get_product_image_url( $product_id, $sku, $model_code )
+		: ( get_the_post_thumbnail_url( $product_id, 'large' ) ?: '' );
 
-                <div style="margin-top:14px; font-size:12px; color:var(--derak-stone-muted); display:flex; align-items:center; justify-content:center; gap:6px;">
-                    <span>🚚</span>
-                    <span>وضعیت تحویل: <strong><?php echo esc_html($lead_time); ?></strong></span>
-                </div>
-            </div>
+	$applications = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) $apps_raw ) ) );
+	$shop_url     = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/?post_type=product' );
+	?>
+	<main id="primary" class="site-main deraak-section">
+		<div class="deraak-container">
+			<!-- مسیر راهنما (Breadcrumb) -->
+			<nav class="deraak-breadcrumb" aria-label="مسیر راهنما">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">صفحه اصلی</a>
+				<span>/</span>
+				<a href="<?php echo esc_url( $shop_url ); ?>">کاتالوگ تجهیزات</a>
+				<?php if ( $cat_name && ! is_wp_error( $cat_link ) && $cat_link ) : ?>
+					<span>/</span>
+					<a href="<?php echo esc_url( $cat_link ); ?>"><?php echo esc_html( $cat_name ); ?></a>
+				<?php endif; ?>
+				<span>/</span>
+				<strong><?php the_title(); ?></strong>
+			</nav>
 
-            <!-- Right: Product Engineering Details -->
-            <div class="derak-single-info">
-                <div>
-                    <?php if (!empty($sku)) : ?>
-                        <span class="derak-card-model" dir="ltr" style="font-size:16px; padding:4px 12px;"><?php echo esc_html($sku); ?></span>
-                    <?php endif; ?>
-                    <h1 style="color:var(--derak-primary); font-size:22px; font-weight:800; margin:8px 0;"><?php the_title(); ?></h1>
-                </div>
+			<div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'deraak-single-product', $product ); ?>>
+				<div class="deraak-single-product__grid">
+					<!-- ستون اول: تصویر صنعتی، متادیتای کلیدی، کاربردها و دانلود دیتاشیت -->
+					<div class="deraak-single-product__media-card">
+						<div class="deraak-single-product__gallery">
+							<?php if ( $img_url ) : ?>
+								<img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" style="max-height:320px;width:auto;object-fit:contain;" />
+							<?php else : ?>
+								<div class="deraak-product-card__placeholder font-mono" dir="ltr"><?php echo esc_html( $model_code ? $model_code : 'DERAAK' ); ?></div>
+							<?php endif; ?>
+						</div>
 
-                <!-- Parameters Matrix -->
-                <?php deraak_render_param_matrix($post_id); ?>
+						<div class="deraak-single-product__meta-list">
+							<div class="deraak-single-product__meta-box">
+								<span class="deraak-single-product__meta-label">برند سازنده</span>
+								<span class="deraak-single-product__meta-val" dir="ltr">
+									<?php echo esc_html( $brand_name ); ?>
+									<?php if ( $brand_country ) : ?>
+										<small style="color:var(--color-muted-fg);font-weight:500;">(<?php echo esc_html( $brand_country ); ?>)</small>
+									<?php endif; ?>
+								</span>
+							</div>
+							<div class="deraak-single-product__meta-box">
+								<span class="deraak-single-product__meta-label">کد مدل فنی (Model)</span>
+								<span class="deraak-single-product__meta-val font-mono" dir="ltr"><?php echo esc_html( $model_code ? $model_code : ( $sku ? $sku : 'N/A' ) ); ?></span>
+							</div>
+							<div class="deraak-single-product__meta-box">
+								<span class="deraak-single-product__meta-label">کد کاتالوگ (SKU)</span>
+								<span class="deraak-single-product__meta-val font-mono" dir="ltr"><?php echo esc_html( $sku ? $sku : 'DRK-' . $product_id ); ?></span>
+							</div>
+							<div class="deraak-single-product__meta-box">
+								<span class="deraak-single-product__meta-label">وضعیت تأمین و تحویل</span>
+								<span class="deraak-single-product__meta-val" style="color:var(--color-success);">
+									<?php echo esc_html( $lead_time ? $lead_time : 'آماده استعلام و تأمین' ); ?>
+								</span>
+							</div>
+						</div>
 
-                <!-- Excerpt / Short Description -->
-                <?php if (has_excerpt()) : ?>
-                    <div style="font-size:13px; color:var(--derak-stone-charcoal); line-height:1.7; background-color:#FFFFFF; border:1px solid var(--derak-border); border-radius:8px; padding:12px;">
-                        <?php the_excerpt(); ?>
-                    </div>
-                <?php endif; ?>
+						<?php if ( ! empty( $applications ) ) : ?>
+							<div style="margin-bottom:1.25rem;padding:1rem;background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-md);">
+								<h4 style="font-size:0.86rem;margin:0 0 0.5rem;">کاربردهای صنعتی پیشنهادی:</h4>
+								<ul style="margin:0;padding-right:1.15rem;font-size:0.83rem;color:var(--color-muted-fg);">
+									<?php foreach ( $applications as $app_line ) : ?>
+										<li><?php echo esc_html( $app_line ); ?></li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+						<?php endif; ?>
 
-                <!-- CTAs: Add to RFQ & External Deraak.com Link -->
-                <div style="display:flex; flex-wrap:wrap; gap:10px; margin:16px 0;">
-                    <button type="button" 
-                            class="derak-btn derak-btn-accent derak-btn-icon-add" 
-                            style="width:auto; height:44px; padding:0 24px; font-size:14px;"
-                            data-product-id="<?php echo esc_attr($post_id); ?>"
-                            data-product-title="<?php echo esc_attr(get_the_title()); ?>"
-                            data-product-model="<?php echo esc_attr($sku); ?>">
-                        <span>+ افزودن به لیست استعلام قیمت</span>
-                    </button>
+						<?php if ( $datasheet_url ) : ?>
+							<a href="<?php echo esc_url( $datasheet_url ); ?>" target="_blank" rel="noopener noreferrer" class="deraak-btn deraak-btn--outline deraak-btn--full">
+								📄 دانلود دیتاشیت فنی و کاتالوگ (PDF)
+							</a>
+						<?php endif; ?>
+					</div>
 
-                    <!-- Explicit External Destination URL (deraak.com) -->
-                    <?php deraak_render_external_destination_btn($post_id); ?>
-                </div>
+					<!-- ستون دوم: عنوان، هایلایت‌های فنی، باکس استعلام قیمت B2B و جدول کامل مشخصات -->
+					<div class="deraak-single-product__info-card">
+						<div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.65rem;">
+							<span class="deraak-product-card__brand" dir="ltr"><?php echo esc_html( $brand_name ); ?></span>
+							<span class="deraak-product-card__cat"><?php echo esc_html( $cat_name ); ?></span>
+						</div>
 
-                <!-- Structured Technical Specifications Table -->
-                <h3 style="color:var(--derak-primary); font-size:15px; font-weight:700; margin:16px 0 6px 0; border-bottom:2px solid var(--derak-accent); padding-bottom:6px; display:inline-block;">
-                    ماتریس مشخصات فنی و استانداردهای صنعتی
-                </h3>
+						<h1 style="font-size:clamp(1.35rem, 2.5vw, 1.85rem);margin-bottom:0.75rem;"><?php the_title(); ?></h1>
 
-                <table class="derak-specs-table">
-                    <tbody>
-                        <?php if (!empty($spec_proto)) : ?>
-                            <tr><th>پروتکل خروجی و ارتباطی</th><td dir="ltr"><?php echo esc_html($spec_proto); ?></td></tr>
-                        <?php endif; ?>
-                        <?php if (!empty($spec_sup)) : ?>
-                            <tr><th>ولتاژ تغذیه کاری</th><td dir="ltr"><?php echo esc_html($spec_sup); ?></td></tr>
-                        <?php endif; ?>
-                        <?php if (!empty($spec_acc)) : ?>
-                            <tr><th>کلاس دقت اندازه‌گیری</th><td><?php echo esc_html($spec_acc); ?></td></tr>
-                        <?php endif; ?>
-                        <?php if (!empty($spec_cert)) : ?>
-                            <tr><th>تاییدیه‌ها و استاندارد ایمنی</th><td dir="ltr"><?php echo esc_html($spec_cert); ?></td></tr>
-                        <?php endif; ?>
-                        <?php if (!empty($spec_temp)) : ?>
-                            <tr><th>محدوده دمای فرآیندی</th><td dir="ltr"><?php echo esc_html($spec_temp); ?></td></tr>
-                        <?php endif; ?>
-                        <?php if (!empty($spec_press)) : ?>
-                            <tr><th>تحمل فشار مکانیکی</th><td dir="ltr"><?php echo esc_html($spec_press); ?></td></tr>
-                        <?php endif; ?>
-                        <tr><th>کد شناسه کاتالوگ</th><td class="derak-mono" dir="ltr">DERAK-<?php echo esc_html($post_id); ?></td></tr>
-                    </tbody>
-                </table>
+						<div style="color:var(--color-muted-fg);font-size:0.95rem;margin-bottom:1.25rem;">
+							<?php echo wp_kses_post( wpautop( $product->get_short_description() ? $product->get_short_description() : get_the_excerpt() ) ); ?>
+						</div>
 
-                <!-- Full Description -->
-                <div style="font-size:13px; line-height:1.8; color:var(--derak-stone-charcoal);">
-                    <?php the_content(); ?>
-                </div>
-            </div>
-        </div>
+						<?php if ( ! empty( $specs ) ) : ?>
+							<div class="deraak-highlights-grid">
+								<?php foreach ( array_slice( $specs, 0, 3 ) as $hl ) : ?>
+									<div class="deraak-highlight-box">
+										<span class="deraak-highlight-box__label"><?php echo esc_html( $hl['key'] ); ?></span>
+										<span class="deraak-highlight-box__val font-mono" dir="ltr"><?php echo esc_html( $hl['value'] ); ?></span>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
 
-        <!-- Script: Record Recently Viewed in LocalStorage -->
-        <script>
-        (function() {
-            try {
-                var currentId = "<?php echo esc_js($post_id); ?>";
-                var key = 'derak_recently_viewed';
-                var list = JSON.parse(localStorage.getItem(key) || '[]');
-                list = list.filter(function(id) { return id !== currentId; });
-                list.unshift(currentId);
-                if (list.length > 12) list = list.slice(0, 12);
-                localStorage.setItem(key, JSON.stringify(list));
-            } catch(e) {}
-        })();
-        </script>
+						<!-- باکس استعلام رسمی قیمت و موجودی (RFQ) -->
+						<div class="deraak-inquiry-box">
+							<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+								<div>
+									<strong style="font-size:1rem;color:var(--slate-50);display:block;">استعلام قیمت رسمی و بررسی تطابق کد سفارش (Order Code)</strong>
+									<span style="font-size:0.8rem;color:var(--slate-300);">تجهیز را به لیست استعلام اضافه کنید تا پیش‌فاکتور رسمی برای شما صادر شود.</span>
+								</div>
+								<span class="deraak-badge-count" style="background:var(--yellow-950);color:var(--yellow-400);border:1px solid var(--yellow-700);">ضمانت اصالت کالا</span>
+							</div>
 
-        <?php
-    endwhile;
-    ?>
+							<div class="deraak-inquiry-box__controls">
+								<label for="deraak-single-qty" style="font-size:0.82rem;">تعداد درخواستی:</label>
+								<input type="number" id="deraak-single-qty" class="deraak-qty-input font-mono" value="1" min="1" max="999" dir="ltr" />
 
-</div>
+								<button
+									type="button"
+									id="deraak-single-add-rfq"
+									class="deraak-btn deraak-btn--accent deraak-add-rfq-btn"
+									data-id="<?php echo esc_attr( $product_id ); ?>"
+									data-title="<?php echo esc_attr( get_the_title() ); ?>"
+									data-sku="<?php echo esc_attr( $sku ? $sku : $model_code ); ?>"
+									data-model="<?php echo esc_attr( $model_code ? $model_code : $sku ); ?>"
+									data-brand="<?php echo esc_attr( $brand_name ); ?>"
+									data-category="<?php echo esc_attr( $cat_name ); ?>"
+									data-image="<?php echo esc_url( $img_url ); ?>"
+									data-url="<?php echo esc_url( get_permalink() ); ?>"
+									data-qty-input="#deraak-single-qty"
+								>
+									+ افزودن به لیست استعلام قیمت
+								</button>
 
-<?php
-get_footer();
+								<a
+									href="<?php echo esc_url( 'https://wa.me/989121112233?text=' . rawurlencode( 'سلام، جهت استعلام قیمت و مشخصات فنی تجهیز ' . get_the_title() . ' (' . ( $model_code ? $model_code : $sku ) . ') پیام می‌دهم.' ) ); ?>"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="deraak-btn deraak-btn--ghost-light"
+								>
+									مشاوره واتساپ مهندسی
+								</a>
+							</div>
+						</div>
+
+						<!-- جدول کامل مشخصات فنی -->
+						<?php if ( ! empty( $specs ) ) : ?>
+							<div style="margin-top:1.75rem;">
+								<h2 style="font-size:1.15rem;margin-bottom:0.75rem;">جدول مشخصات فنی (Technical Specifications)</h2>
+								<table class="deraak-spec-table">
+									<tbody>
+										<?php foreach ( $specs as $spec_row ) : ?>
+											<?php if ( ! empty( $spec_row['key'] ) ) : ?>
+												<tr>
+													<th><?php echo esc_html( $spec_row['key'] ); ?></th>
+													<td class="font-mono" dir="ltr"><?php echo esc_html( isset( $spec_row['value'] ) ? $spec_row['value'] : '' ); ?></td>
+												</tr>
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+						<?php endif; ?>
+
+						<!-- توضیحات تکمیلی مهندسی -->
+						<?php if ( get_the_content() ) : ?>
+							<div style="margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid var(--color-border);">
+								<h2 style="font-size:1.15rem;margin-bottom:0.75rem;">بررسی فنی و نکات مهندسی</h2>
+								<div style="font-size:0.92rem;line-height:1.85;color:var(--color-fg);">
+									<?php the_content(); ?>
+								</div>
+							</div>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- اسکریپت ثبت محصول در لیست مشاهدات اخیر IndexedDB -->
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		if (window.DeraakRecentlyViewed && typeof window.DeraakRecentlyViewed.add === 'function') {
+			window.DeraakRecentlyViewed.add({
+				id: <?php echo intval( $product_id ); ?>,
+				title: <?php echo wp_json_encode( get_the_title(), JSON_UNESCAPED_UNICODE ); ?>,
+				sku: <?php echo wp_json_encode( $sku ? $sku : $model_code, JSON_UNESCAPED_UNICODE ); ?>,
+				model: <?php echo wp_json_encode( $model_code ? $model_code : $sku, JSON_UNESCAPED_UNICODE ); ?>,
+				brand: <?php echo wp_json_encode( $brand_name, JSON_UNESCAPED_UNICODE ); ?>,
+				category: <?php echo wp_json_encode( $cat_name, JSON_UNESCAPED_UNICODE ); ?>,
+				url: <?php echo wp_json_encode( get_permalink(), JSON_UNESCAPED_UNICODE ); ?>,
+				image: <?php echo wp_json_encode( $img_url, JSON_UNESCAPED_UNICODE ); ?>
+			});
+		}
+	});
+	</script>
+	<?php
+endwhile;
+
+get_footer( 'shop' );

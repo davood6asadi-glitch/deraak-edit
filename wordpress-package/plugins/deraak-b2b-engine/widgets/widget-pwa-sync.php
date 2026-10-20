@@ -1,6 +1,6 @@
 <?php
 /**
- * Elementor Widget: Deraak PWA Offline Sync Card
+ * Elementor Widget: Deraak PWA Offline Sync & Local Catalog Browser Card
  *
  * @package Deraak_B2B_Engine
  */
@@ -10,7 +10,6 @@ if (!defined('ABSPATH')) {
 }
 
 use Elementor\Widget_Base;
-use Elementor\Controls_Manager;
 
 class Deraak_Widget_PWA_Sync extends Widget_Base {
 
@@ -32,41 +31,59 @@ class Deraak_Widget_PWA_Sync extends Widget_Base {
 
     protected function render() {
         ?>
-        <section class="derak-pwa-banner" style="background-color:#031A54; color:#FFFFFF; border-radius:12px; padding:20px; border:1px solid rgba(19, 82, 223, 0.4); margin:24px 0; box-shadow:0 4px 14px rgba(3,26,84,0.2);">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+        <section class="derak-pwa-banner" style="background-color:var(--blue-950); color:var(--slate-50); border-radius:12px; padding:20px; border:1px solid var(--blue-800); margin:24px 0;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:16px;">
                 <div>
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                        <span style="font-size:22px;">💾</span>
-                        <h3 style="font-size:16px; font-weight:800; color:#FFFFFF; margin:0;">
-                            دسترسی آفلاین به کاتالوگ و دیتاشیت‌ها (PWA)
-                        </h3>
-                    </div>
-                    <p style="font-size:12px; color:#C6CDFE; line-height:1.6; margin:0; max-width:650px;">
-                        طراحی شده برای محیط‌های صنعتی، پالایشگاه‌ها و سکوهای نفتی پارس جنوبی با پوشش ضعیف اینترنت. اطلاعات کلیدی کدهای سفارش و مشخصات تجهیزات روی حافظه دستگاه در دسترس خواهد بود.
+                    <h3 style="font-size:17px; font-weight:700; color:var(--slate-50); margin:0 0 6px 0;">
+                        دسترسی آفلاین به کاتالوگ مهندسی (PWA)
+                    </h3>
+                    <p style="font-size:13px; color:var(--blue-100); line-height:1.7; margin:0; max-width:650px;">
+                        با همگام‌سازی کاتالوگ، مشخصات فنی تجهیزات در پایگاه داده محلی مرورگر (IndexedDB) ذخیره شده و در زمان اختلال یا قطع اینترنت بین‌الملل قابل جستجو و مرور خواهد بود.
                     </p>
                 </div>
             </div>
 
-            <!-- Sync Status Box -->
-            <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:12px; margin:14px 0;">
-                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:6px;">
-                    <span>وضعیت پایگاه داده محلی (IndexedDB):</span>
-                    <span id="derak-pwa-sync-label" style="color:#FBDA58; font-weight:bold; font-family:var(--derak-font-mono);">کاتالوگ آماده است</span>
+            <!-- Sync Status & Last Sync Timestamp -->
+            <div style="background:var(--blue-900); border:1px solid var(--blue-800); border-radius:8px; padding:12px 14px; margin:14px 0;">
+                <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; font-size:12px; margin-bottom:8px;">
+                    <span>وضعیت حافظه آفلاین (IndexedDB): <strong id="derak-pwa-sync-label" style="color:var(--yellow-400);">بررسی وضعیت...</strong></span>
+                    <span id="derak-pwa-last-sync" style="color:var(--blue-300);">آخرین همگام‌سازی: ثبت نشده</span>
                 </div>
-                <div style="width:100%; height:8px; background:rgba(255,255,255,0.2); border-radius:4px; overflow:hidden;">
-                    <div id="derak-pwa-progress" style="width:100%; height:100%; background:#FBDA58; border-radius:4px; transition:width 0.4s;"></div>
+                <div id="derak-pwa-stale-warning" style="display:none; color:var(--yellow-400); font-size:11px; margin-bottom:8px;">
+                    توجه: بیش از ۲۴ ساعت از آخرین همگام‌سازی گذشته یا در حالت آفلاین هستید؛ اطلاعات نمایش داده شده ممکن است قدیمی باشد.
+                </div>
+                <div style="width:100%; height:6px; background:var(--blue-800); border-radius:4px; overflow:hidden;">
+                    <div id="derak-pwa-progress" style="width:100%; height:100%; background:var(--yellow-500); border-radius:4px;"></div>
                 </div>
             </div>
 
             <!-- Action Buttons -->
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-                <button type="button" id="derak-pwa-sync-btn" class="derak-btn" style="background:#FFFFFF; color:#031A54; width:100%;">
-                    <span>🔄 همگام‌سازی کاتالوگ آفلاین</span>
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <button type="button" id="derak-pwa-sync-btn" class="derak-btn" style="background:var(--blue-500); color:var(--slate-50);">
+                    <span>همگام‌سازی کاتالوگ آفلاین</span>
                 </button>
 
-                <button type="button" id="derak-pwa-install-btn" class="derak-btn derak-btn-accent" style="width:100%;">
-                    <span>📲 نصب نسخه پیشرو (PWA)</span>
+                <button type="button" id="derak-pwa-browse-btn" class="derak-btn derak-btn-outline" style="background:var(--blue-900); color:var(--slate-50); border-color:var(--blue-700);">
+                    <span>مرور و جستجوی کاتالوگ آفلاین</span>
                 </button>
+
+                <button type="button" id="derak-pwa-install-btn" class="derak-btn derak-btn-accent" style="background:var(--yellow-500); color:var(--yellow-950);">
+                    <span>نصب وب‌اپلیکیشن (PWA)</span>
+                </button>
+            </div>
+
+            <!-- Offline Interactive Catalog Browser Container -->
+            <div id="derak-offline-catalog-panel" style="display:none; margin-top:18px; padding-top:16px; border-top:1px solid var(--blue-800);">
+                <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+                    <input type="search" id="derak-offline-search-input" placeholder="جستجو در کاتالوگ آفلاین (نام تجهیز، کد مدل، برند یا مشخصه فنی)..." style="flex:2; min-width:220px; height:40px; border-radius:6px; border:1px solid var(--blue-700); background:var(--blue-900); color:var(--slate-50); padding:0 12px; font-size:13px;" />
+                    <select id="derak-offline-brand-filter" style="flex:1; min-width:150px; height:40px; border-radius:6px; border:1px solid var(--blue-700); background:var(--blue-900); color:var(--slate-50); padding:0 10px; font-size:13px;">
+                        <option value="">همه برندها</option>
+                    </select>
+                    <select id="derak-offline-cat-filter" style="flex:1; min-width:150px; height:40px; border-radius:6px; border:1px solid var(--blue-700); background:var(--blue-900); color:var(--slate-50); padding:0 10px; font-size:13px;">
+                        <option value="">همه دسته‌ها</option>
+                    </select>
+                </div>
+                <div id="derak-offline-catalog-results" class="derak-products-grid"></div>
             </div>
         </section>
         <?php

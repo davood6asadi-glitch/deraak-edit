@@ -4,9 +4,86 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Centralized Local IBM Plex Sans Arabic Typography System
+ * Self-hosted WOFF2 files (SIL Open Font License 1.1) — Zero external font dependencies
+ */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  src: url('/fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  src: url('/fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  src: url('/fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  src: url('/fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme inline {
-  --font-sans: var(--font-vazirmatn), system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-sans: var(--font-plex-arabic);
+  --font-mono: var(--font-plex-arabic);
+
+  /* Tech Blue Scale */
+  --color-tech-blue-50: var(--blue-50);
+  --color-tech-blue-100: var(--blue-100);
+  --color-tech-blue-200: var(--blue-200);
+  --color-tech-blue-300: var(--blue-300);
+  --color-tech-blue-400: var(--blue-400);
+  --color-tech-blue-500: var(--blue-500);
+  --color-tech-blue-600: var(--blue-600);
+  --color-tech-blue-700: var(--blue-700);
+  --color-tech-blue-800: var(--blue-800);
+  --color-tech-blue-900: var(--blue-900);
+  --color-tech-blue-950: var(--blue-950);
+
+  /* Industrial Yellow Scale */
+  --color-ind-yellow-50: var(--yellow-50);
+  --color-ind-yellow-100: var(--yellow-100);
+  --color-ind-yellow-200: var(--yellow-200);
+  --color-ind-yellow-300: var(--yellow-300);
+  --color-ind-yellow-400: var(--yellow-400);
+  --color-ind-yellow-500: var(--yellow-500);
+  --color-ind-yellow-600: var(--yellow-600);
+  --color-ind-yellow-700: var(--yellow-700);
+  --color-ind-yellow-800: var(--yellow-800);
+  --color-ind-yellow-900: var(--yellow-900);
+  --color-ind-yellow-950: var(--yellow-950);
+
+  /* Slate Neutral Scale */
+  --color-slate-neutral-50: var(--slate-50);
+  --color-slate-neutral-100: var(--slate-100);
+  --color-slate-neutral-200: var(--slate-200);
+  --color-slate-neutral-300: var(--slate-300);
+  --color-slate-neutral-400: var(--slate-400);
+  --color-slate-neutral-500: var(--slate-500);
+  --color-slate-neutral-600: var(--slate-600);
+  --color-slate-neutral-700: var(--slate-700);
+  --color-slate-neutral-800: var(--slate-800);
+  --color-slate-neutral-900: var(--slate-900);
+  --color-slate-neutral-950: var(--slate-950);
+
+  /* Semantic UI Tokens */
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -36,27 +113,96 @@
 
 :root {
   color-scheme: light;
-  --background: #f4f3ef;
-  --foreground: #0d1a33;
-  --card: #ffffff;
-  --card-foreground: #0d1a33;
-  --popover: #ffffff;
-  --popover-foreground: #0d1a33;
-  --primary: #0b2a6b;
-  --primary-foreground: #ffffff;
-  --secondary: #e9e7e1;
-  --secondary-foreground: #0d1a33;
-  --muted: #ebe9e3;
-  --muted-foreground: #5c5f66;
-  --accent: #e8b931;
-  --accent-foreground: #1d1602;
-  --destructive: #b42318;
-  --border: #d9d6ce;
-  --input: #d0cdc4;
-  --ring: #0b2a6b;
-  --ink: #081631;
-  --ink-foreground: #eef1f8;
+  --font-plex-arabic: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+  --font-sans: var(--font-plex-arabic);
+  --font-mono: var(--font-plex-arabic);
+
+  /* Tech Blue Scale */
+  --blue-50: #EBF5FF;
+  --blue-100: #D6EBFF;
+  --blue-200: #ADADFF;
+  --blue-300: #70B8FF;
+  --blue-400: #3399FF;
+  --blue-500: #008DFF;
+  --blue-600: #006FD6;
+  --blue-700: #0052CC;
+  --blue-800: #003A99;
+  --blue-900: #002566;
+  --blue-950: #00143B;
+
+  /* Industrial Yellow Scale */
+  --yellow-50: #FFFDF0;
+  --yellow-100: #FFF9CC;
+  --yellow-200: #FFF099;
+  --yellow-300: #FFE466;
+  --yellow-400: #FFD633;
+  --yellow-500: #FFC837;
+  --yellow-600: #E5A800;
+  --yellow-700: #B88200;
+  --yellow-800: #8A5E00;
+  --yellow-900: #5C3C00;
+  --yellow-950: #3B2400;
+
+  /* Slate Neutral Scale */
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-300: #CBD5E1;
+  --slate-400: #94A3B8;
+  --slate-500: #64748B;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1E293B;
+  --slate-900: #0F172A;
+  --slate-950: #020617;
+
+  /* Light Mode Semantic Mapping */
+  --background: var(--slate-50);
+  --foreground: var(--slate-900);
+  --card: var(--slate-50);
+  --card-foreground: var(--slate-900);
+  --popover: var(--slate-50);
+  --popover-foreground: var(--slate-900);
+  --primary: var(--blue-500);
+  --primary-foreground: var(--slate-50);
+  --secondary: var(--slate-100);
+  --secondary-foreground: var(--slate-800);
+  --muted: var(--slate-100);
+  --muted-foreground: var(--slate-600);
+  --accent: var(--yellow-500);
+  --accent-foreground: var(--yellow-950);
+  --destructive: var(--yellow-800);
+  --border: var(--slate-200);
+  --input: var(--slate-300);
+  --ring: var(--blue-500);
+  --ink: var(--blue-950);
+  --ink-foreground: var(--slate-50);
   --radius: 0.5rem;
+}
+
+.dark,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --background: var(--slate-950);
+  --foreground: var(--slate-50);
+  --card: var(--slate-900);
+  --card-foreground: var(--slate-50);
+  --popover: var(--slate-900);
+  --popover-foreground: var(--slate-50);
+  --primary: var(--blue-500);
+  --primary-foreground: var(--slate-50);
+  --secondary: var(--slate-800);
+  --secondary-foreground: var(--slate-100);
+  --muted: var(--slate-800);
+  --muted-foreground: var(--slate-400);
+  --accent: var(--yellow-500);
+  --accent-foreground: var(--yellow-950);
+  --destructive: var(--yellow-400);
+  --border: var(--slate-800);
+  --input: var(--slate-700);
+  --ring: var(--blue-400);
+  --ink: var(--blue-950);
+  --ink-foreground: var(--slate-50);
 }
 
 @layer base {
@@ -65,20 +211,38 @@
   }
   html {
     scroll-behavior: smooth;
+    font-family: var(--font-plex-arabic);
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground transition-colors duration-200;
+    font-family: var(--font-plex-arabic);
+    line-height: 1.7;
+  }
+  button,
+  input,
+  select,
+  textarea,
+  optgroup,
+  table,
+  th,
+  td,
+  dialog,
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: inherit;
   }
 }
 
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgb(112 184 255 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(112 184 255 / 0.08) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
 dialog::backdrop {
-  background: rgb(8 22 49 / 0.55);
+  background: rgb(2 6 23 / 0.65);
   backdrop-filter: blur(2px);
 }

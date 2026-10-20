@@ -1,6 +1,7 @@
 <?php
 /**
  * Elementor Widget: Deraak Bento Categories
+ * Queries real WooCommerce / WordPress product_cat taxonomy terms
  *
  * @package Deraak_B2B_Engine
  */
@@ -50,51 +51,49 @@ class Deraak_Widget_Categories extends Widget_Base {
 
     protected function render() {
         $settings = $this->get_settings_for_display();
-        $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop');
+        $terms = taxonomy_exists('product_cat') ? get_terms(array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => false,
+            'parent'     => 0,
+        )) : array();
         ?>
         <section class="derak-bento-section">
             <?php if (!empty($settings['title'])) : ?>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <div style="display:flex; align-items:center; gap:6px;">
-                        <span style="font-size:18px;">📑</span>
-                        <h2 style="font-size:16px; font-weight:800; color:var(--derak-primary); margin:0;">
-                            <?php echo esc_html($settings['title']); ?>
-                        </h2>
-                    </div>
-                    <span style="font-size:11px; color:var(--derak-stone-muted);">انتخاب رسته تجهیزات</span>
+                    <h2 style="font-size:17px; font-weight:700; color:var(--derak-primary); margin:0;">
+                        <?php echo esc_html($settings['title']); ?>
+                    </h2>
+                    <span style="font-size:12px; color:var(--derak-stone-muted);">انتخاب رسته تجهیزات</span>
                 </div>
             <?php endif; ?>
 
             <div class="derak-bento-grid">
-                <a href="<?php echo esc_url(add_query_arg('product_cat', 'instrumentation', $shop_url)); ?>" class="derak-bento-card">
-                    <div class="derak-bento-header">
-                        <div class="derak-bento-icon">⚙️</div>
-                        <span class="derak-bento-count">۱۲۰+ مدل</span>
+                <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
+                    <?php foreach ($terms as $term) :
+                        if ($term->slug === 'uncategorized') {
+                            continue;
+                        }
+                        $term_link = get_term_link($term);
+                        if (is_wp_error($term_link)) {
+                            continue;
+                        }
+                        ?>
+                        <a href="<?php echo esc_url($term_link); ?>" class="derak-bento-card">
+                            <div class="derak-bento-header">
+                                <span class="derak-bento-title" style="margin:0;"><?php echo esc_html($term->name); ?></span>
+                                <span class="derak-bento-count"><?php echo (int) $term->count; ?> تجهیز</span>
+                            </div>
+                            <?php if (!empty($term->description)) : ?>
+                                <p class="derak-bento-desc" style="margin-top:8px;"><?php echo esc_html($term->description); ?></p>
+                            <?php endif; ?>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="derak-bento-card">
+                        <h3 class="derak-bento-title">هنوز دسته‌بندی محصولی ثبت نشده است</h3>
+                        <p class="derak-bento-desc">از بخش «محصولات &gt; دسته‌بندی‌ها» یا درون‌ریز نمونه در «تنظیمات دراک» دسته‌بندی‌ها را اضافه کنید.</p>
                     </div>
-                    <h3 class="derak-bento-title">ابزار دقیق</h3>
-                    <p class="derak-bento-desc">ترانسمیتر، سنسورهای فشار، سطح، جریان و دما</p>
-                    <div class="derak-bento-tags">HART, Fieldbus, Profibus-PA</div>
-                </a>
-
-                <a href="<?php echo esc_url(add_query_arg('product_cat', 'automation', $shop_url)); ?>" class="derak-bento-card">
-                    <div class="derak-bento-header">
-                        <div class="derak-bento-icon">💻</div>
-                        <span class="derak-bento-count">۸۵+ مدل</span>
-                    </div>
-                    <h3 class="derak-bento-title">اتوماسیون صنعتی</h3>
-                    <p class="derak-bento-desc">پی‌ال‌سی، کارت‌های ورودی/خروجی، رله و ایزولاتور</p>
-                    <div class="derak-bento-tags">SIL 2 / SIL 3, IO-Link, Modbus</div>
-                </a>
-
-                <a href="<?php echo esc_url(add_query_arg('product_cat', 'electrical', $shop_url)); ?>" class="derak-bento-card">
-                    <div class="derak-bento-header">
-                        <div class="derak-bento-icon">⚡</div>
-                        <span class="derak-bento-count">۶۰+ مدل</span>
-                    </div>
-                    <h3 class="derak-bento-title">برق صنعتی</h3>
-                    <p class="derak-bento-desc">کلید اتوماتیک، کنتاکتور، درایو و حفاظت قدرت</p>
-                    <div class="derak-bento-tags">MCCB, VFD Inverters, Overload</div>
-                </a>
+                <?php endif; ?>
             </div>
         </section>
         <?php

@@ -1,59 +1,20 @@
 /*
-Theme Name: Deraak Industrial
+Theme Name: Deraak Industrial B2B
 Theme URI: https://add.co.ir
-Author: Deraak Instrumentation & Industrial Automation
+Author: Deraak Engineering Team
 Author URI: https://deraak.com
-Description: قالب تخصصی، فوق‌العاده سبک و صنعتی دراک ویژه تجهیزات ابزار دقیق، اتوماسیون صنعتی و برق بازار لاله‌زار تهران. سازگار ۱۰۰٪ با المنتور رایگان، ووکامرس، پیوند به سایت مرجع deraak.com و استاندارد PWA آفلاین.
-Version: 1.0.0
-Requires at least: 6.2
+Description: قالب اختصاصی کاتالوگ صنعتی و تجهیزات ابزار دقیق دراک (B2B). مجهز به سیستم تایپوگرافی یکپارچه و محلی IBM Plex Sans Arabic، سازگار با ووکامرس و المنتور، بهینه‌سازی‌شده برای هاستینگ ایران، استعلام قیمت چندآیتمی (RFQ)، فرم مشاوره با احراز هویت پیامکی کاوه‌نگار (OTP) و کاتالوگ آفلاین PWA.
+Version: 1.2.0
+Requires at least: 6.0
 Tested up to: 6.7
-Requires PHP: 8.1
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 7.4
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: deraak-industrial
-Domain Path: /languages
-Tags: e-commerce, custom-colors, right-to-left-language-support, translation-ready, full-width-template
+Tags: rtl-language-support, e-commerce, custom-logo, custom-menu, featured-images, full-width-template
 */
 
-:root {
-  /* Figma Row 1: Gold / Warm Brass System */
-  --derak-gold-light: #FBDA58;
-  --derak-gold-warm: #CFB343;
-  --derak-gold-olive: #A38D33;
-  --derak-gold-dark: #7A6924;
-  --derak-gold-bronze: #534716;
-  --derak-gold-deep: #302809;
-  --derak-gold-black: #151102;
-
-  /* Figma Row 2: Industrial Technical Blue System */
-  --derak-blue-ice: #EEF0FF;
-  --derak-blue-periwinkle: #C6CDFE;
-  --derak-blue-lavender: #93A3FC;
-  --derak-blue-light: #5879FB;
-  --derak-blue-vibrant: #1352DF;
-  --derak-blue-deep: #093596;
-  --derak-blue-midnight: #031A54;
-
-  /* Figma Row 3: Industrial Neutral Grey System */
-  --derak-stone-light: #DEDCD6;
-  --derak-stone-border: #B6B4AF;
-  --derak-stone-neutral: #908E8A;
-  --derak-stone-muted: #6B6A67;
-  --derak-stone-charcoal: #494846;
-  --derak-stone-slate: #292827;
-  --derak-stone-black: #111110;
-
-  /* Semantics */
-  --derak-bg: #F8F9FE;
-  --derak-surface: #FFFFFF;
-  --derak-primary: #031A54;
-  --derak-primary-hover: #1352DF;
-  --derak-accent: #FBDA58;
-  --derak-accent-hover: #CFB343;
-  --derak-text: #111110;
-  --derak-text-muted: #494846;
-  --derak-border: #DEDCD6;
-
-  --derak-font-sans: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Tahoma, sans-serif;
-  --derak-font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
+/*
+ * استایل‌های اصلی، فونت‌های محلی IBM Plex Sans Arabic و متغیرهای طراحی
+ * در فایل assets/css/theme.css بارگذاری می‌شوند.
+ */

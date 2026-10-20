@@ -1,68 +1,120 @@
-<?php
-/**
- * Header Template for Deraak Industrial Theme
- *
- * @package Deraak_Industrial
- */
-
-if (!defined('ABSPATH')) {
-    exit;
-}
-?><!doctype html>
-<html <?php language_attributes(); ?> dir="rtl">
+<!doctype html>
+<html <?php language_attributes(); ?> dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <!-- PWA & Mobile Web App Meta -->
-    <meta name="theme-color" content="#031A54">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="دراک PWA">
-    
-    <?php wp_head(); ?>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#00143B">
+	<script>
+	(function() {
+		try {
+			var saved = localStorage.getItem('deraak-theme-mode');
+			if (saved === 'dark') {
+				document.documentElement.classList.add('dark');
+				document.documentElement.setAttribute('data-theme', 'dark');
+			}
+		} catch (e) {}
+	})();
+	</script>
+	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<!-- Offline Connectivity Warning -->
-<div id="derak-offline-bar" class="derak-offline-banner hidden">
-    <span>⚠️ شما در حالت آفلاین هستید. اطلاعات کاتالوگ از پایگاه داده محلی مرورگر فراخوانی می‌شود.</span>
+<!-- نوار وضعیت صنعتی و ارتباط مستقیم -->
+<div class="deraak-topbar">
+	<div class="deraak-container deraak-topbar__inner">
+		<div class="deraak-topbar__right">
+			<span id="deraak-network-badge" class="deraak-network-badge">● کاتالوگ آنلاین | آماده استعلام</span>
+			<span>تأمین تخصصی ابزار دقیق Endress+Hauser • PR electronics • ifm</span>
+		</div>
+		<div class="deraak-topbar__left">
+			<button type="button" id="deraak-header-sync-btn" class="deraak-sync-catalog-btn deraak-topbar__sync-link">
+				↻ ذخیره‌سازی آفلاین کاتالوگ
+			</button>
+			<a href="tel:+982188994411" dir="ltr" class="font-mono deraak-topbar__phone">021-88994411</a>
+		</div>
+	</div>
 </div>
 
-<!-- Main Top Header -->
-<header class="derak-header">
-    <div class="derak-container derak-header-inner">
-        <!-- Brand Title & Identity -->
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="derak-brand">
-            <div class="derak-brand-icon">D</div>
-            <div class="derak-brand-titles">
-                <span class="derak-brand-name">دراک</span>
-                <span class="derak-brand-sub">سامانه ابزار دقیق و اتوماسیون صنعتی</span>
-            </div>
-        </a>
+<!-- هدر اصلی دراک -->
+<header class="deraak-header">
+	<div class="deraak-container deraak-header__inner">
+		<!-- برند و لوگو -->
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="deraak-brand">
+			<?php if ( has_custom_logo() ) : ?>
+				<?php the_custom_logo(); ?>
+			<?php else : ?>
+				<span class="deraak-brand__badge font-mono">DRK</span>
+			<?php endif; ?>
+			<div class="deraak-brand__text">
+				<span class="deraak-brand__title"><?php bloginfo( 'name' ); ?></span>
+				<span class="deraak-brand__subtitle">تأمین تجهیزات ابزار دقیق و اتوماسیون صنعتی</span>
+			</div>
+		</a>
 
-        <!-- Fast SKU & Product Search -->
-        <form role="search" method="get" class="derak-search-form" action="<?php echo esc_url(home_url('/')); ?>">
-            <input type="hidden" name="post_type" value="product">
-            <input type="search" class="derak-search-input" placeholder="جستجوی مدل (مانند PR 4116، FMR53، سنسور فشار)..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off" />
-            <span class="derak-search-icon">🔍</span>
-        </form>
+		<!-- منوی ناوبری دسکتاپ -->
+		<nav class="deraak-nav" aria-label="<?php esc_attr_e( 'منوی اصلی', 'deraak-industrial' ); ?>">
+			<?php
+			if ( has_nav_menu( 'primary' ) ) {
+				wp_nav_menu(
+					array(
+						'theme_location' => 'primary',
+						'container'      => false,
+						'menu_class'     => 'deraak-nav__list',
+						'fallback_cb'    => false,
+					)
+				);
+			} else {
+				$shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/?post_type=product' );
+				?>
+				<ul class="deraak-nav__list">
+					<li><a href="<?php echo esc_url( home_url( '/#catalog' ) ); ?>">کاتالوگ تجهیزات</a></li>
+					<li><a href="<?php echo esc_url( $shop_url ); ?>">آرشیو فنی محصولات</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/#brands' ) ); ?>">برندها و فرآیند تأمین</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/#contact' ) ); ?>">درخواست مشاوره (OTP)</a></li>
+				</ul>
+				<?php
+			}
+			?>
+		</nav>
 
-        <!-- Header Actions: Consultation & RFQ -->
-        <div class="derak-header-actions">
-            <?php 
-            $catalog_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/products');
-            ?>
-            <a href="<?php echo esc_url($catalog_url); ?>" class="derak-btn derak-btn-outline" style="display: none;">
-                کاتالوگ
-            </a>
-            
-            <a href="tel:02133900000" class="derak-btn derak-btn-accent">
-                <span>مشاوره فنی لاله‌زار</span>
-            </a>
-        </div>
-    </div>
+		<!-- دکمه‌های عملیاتی (تغییر حالت روشن/تیره، نصب PWA، لیست استعلام RFQ و منوی موبایل) -->
+		<div class="deraak-header__actions">
+			<button
+				type="button"
+				id="deraak-theme-toggle"
+				class="deraak-theme-toggle"
+				aria-label="تغییر حالت نمایش روشن یا تیره"
+				title="تغییر حالت روشن / تیره"
+			>
+				<span id="deraak-theme-toggle-icon">☾</span>
+			</button>
+
+			<button type="button" id="deraak-pwa-install-btn" class="deraak-btn deraak-btn--ghost-light deraak-pwa-install-btn" hidden>
+				<span>نصب نسخه وب‌اپ (PWA)</span>
+			</button>
+
+			<button type="button" id="deraak-open-rfq-drawer" class="deraak-btn deraak-btn--accent" aria-label="مشاهده لیست استعلام قیمت">
+				<span>لیست استعلام</span>
+				<span id="deraak-rfq-count" class="deraak-badge-count deraak-rfq-badge font-mono">0</span>
+			</button>
+
+			<button type="button" id="deraak-mobile-menu-toggle" class="deraak-mobile-toggle" aria-expanded="false" aria-controls="deraak-mobile-nav-drawer" aria-label="باز کردن منوی موبایل">
+				☰
+			</button>
+		</div>
+	</div>
+
+	<!-- منوی کشویی موبایل -->
+	<div id="deraak-mobile-nav-drawer" class="deraak-mobile-drawer">
+		<?php
+		$shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/?post_type=product' );
+		?>
+		<ul class="deraak-nav__list">
+			<li><a href="<?php echo esc_url( home_url( '/#catalog' ) ); ?>">کاتالوگ تجهیزات</a></li>
+			<li><a href="<?php echo esc_url( $shop_url ); ?>">آرشیو فنی محصولات</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/#brands' ) ); ?>">برندها و فرآیند تأمین</a></li>
+			<li><a href="<?php echo esc_url( home_url( '/#contact' ) ); ?>">درخواست مشاوره پیامکی (کاوه‌نگار)</a></li>
+		</ul>
+	</div>
 </header>
-<main class="derak-main-content">

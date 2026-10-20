@@ -22,7 +22,7 @@ export function Hero() {
       <div className="bg-grid absolute inset-0" aria-hidden />
       <div className="absolute inset-0 bg-gradient-to-l from-ink via-ink/85 to-ink/40" aria-hidden />
 
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-12 px-4 pb-14 pt-16 md:px-8 md:pb-20 md:pt-24">
+      <div className="relative mx-auto flex h-[600px] w-[1150px] max-w-7xl flex-col gap-12 px-4 pb-14 pt-16 md:px-8 md:pb-20 md:pt-24">
         <div className="flex max-w-2xl flex-col gap-6">
           <span className="inline-flex w-fit items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-xs text-accent" dir="ltr">
             <span className="size-1.5 rounded-full bg-accent" aria-hidden />

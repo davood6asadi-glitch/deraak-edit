@@ -1,65 +1,61 @@
 /*
- * RTL and Local Typography for Deraak Industrial Theme
- * 100% Self-hosted - Zero dependencies on Google Fonts
- */
+Theme Name: Deraak Industrial B2B
+Description: استایل‌های راست‌به‌چپ (RTL) اختصاصی برای کاتالوگ صنعتی دراک با فونت یکپارچه IBM Plex Sans Arabic
+*/
 
-@font-face {
-  font-family: 'Vazirmatn';
-  src: url('assets/fonts/vazirmatn/Vazirmatn-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+html[dir="rtl"],
+body.rtl {
+	direction: rtl;
+	unicode-bidi: embed;
+	text-align: right;
+	font-family: var(--font-plex-arabic);
 }
 
-@font-face {
-  font-family: 'Vazirmatn';
-  src: url('assets/fonts/vazirmatn/Vazirmatn-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+/* کدهای فنی، پارت‌نامبرها، شماره‌ها و مشخصات انگلیسی به صورت چپ‌به‌راست اما با همان فونت یکپارچه IBM Plex Sans Arabic */
+.rtl .font-mono,
+.rtl [dir="ltr"],
+.rtl .product-sku,
+.rtl .model-code,
+.rtl .tech-spec-value-ltr,
+.rtl .deraak-ltr {
+	direction: ltr;
+	unicode-bidi: isolate;
+	text-align: left;
+	font-family: var(--font-plex-arabic);
 }
 
-@font-face {
-  font-family: 'Vazirmatn';
-  src: url('assets/fonts/vazirmatn/Vazirmatn-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+/* اصلاح جهت آیکون‌ها در حالت RTL */
+.rtl .icon-flip-rtl {
+	transform: scaleX(-1);
 }
 
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: url('assets/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+/* جداول مشخصات فنی در حالت RTL */
+.rtl .deraak-spec-table th {
+	text-align: right;
+	border-left: 1px solid var(--color-border);
+	border-right: none;
 }
 
-@font-face {
-  font-family: 'JetBrains Mono';
-  src: url('assets/fonts/jetbrains-mono/JetBrainsMono-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+.rtl .deraak-spec-table td {
+	text-align: right;
 }
 
-html, body {
-  direction: rtl;
-  text-align: right;
-  font-family: var(--derak-font-sans);
-  background-color: var(--derak-bg);
-  color: var(--derak-text);
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* اصلاح فاصله‌ها در ووکامرس RTL */
+.rtl .woocommerce-breadcrumb {
+	text-align: right;
 }
 
-*, *::before, *::after {
-  box-sizing: inherit;
-}
-
-.derak-mono, [dir="ltr"] {
-  font-family: var(--derak-font-mono);
+/* تضمین ارث‌بری فونت IBM Plex Sans Arabic در تمام کنترل‌های فرم و جداول در حالت RTL */
+.rtl button,
+.rtl input,
+.rtl select,
+.rtl textarea,
+.rtl optgroup,
+.rtl table,
+.rtl th,
+.rtl td,
+.rtl dialog,
+.rtl code,
+.rtl pre {
+	font-family: inherit;
 }

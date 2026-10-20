@@ -1,658 +1,1800 @@
-/*
- * Deraak Industrial B2B CSS Architecture
- * Matches React/Figma Industrial Design tokens precisely
- */
-
-.derak-container {
-  width: 100%;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-/* Header */
-.derak-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: var(--derak-primary);
-  color: #FFFFFF;
-  border-bottom: 2px solid var(--derak-blue-deep);
-  box-shadow: 0 4px 12px rgba(3, 26, 84, 0.15);
-}
-
-.derak-header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.derak-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: #FFFFFF;
-}
-
-.derak-brand-icon {
-  width: 36px;
-  height: 36px;
-  background-color: var(--derak-accent);
-  color: var(--derak-gold-black);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 18px;
+/* ==========================================================================
+   1. فونت‌های محلی (Self-Hosted IBM Plex Sans Arabic - SIL OFL 1.1)
+   بدون هیچ‌گونه وابستگی به CDN خارجی یا اینترنت بین‌الملل
+   ========================================================================== */
+@font-face {
+	font-family: 'IBM Plex Sans Arabic';
+	src: url('../fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans Arabic';
+	src: url('../fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Medium.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans Arabic';
+	src: url('../fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-SemiBold.woff2') format('woff2');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans Arabic';
+	src: url('../fonts/ibm-plex-sans-arabic/IBMPlexSansArabic-Bold.woff2') format('woff2');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* ==========================================================================
+   2. پالت رنگی کامل و متمرکز سیستم طراحی دراک (۳۳ کد رنگی استاندارد)
+   - Tech Blue (50–950)
+   - Industrial Yellow (50–950)
+   - Slate Neutral (50–950)
+   ========================================================================== */
+:root {
+	color-scheme: light;
+
+	/* Tech Blue Scale */
+	--blue-50: #EBF5FF;
+	--blue-100: #D6EBFF;
+	--blue-200: #ADADFF;
+	--blue-300: #70B8FF;
+	--blue-400: #3399FF;
+	--blue-500: #008DFF;
+	--blue-600: #006FD6;
+	--blue-700: #0052CC;
+	--blue-800: #003A99;
+	--blue-900: #002566;
+	--blue-950: #00143B;
+
+	/* Industrial Yellow Scale */
+	--yellow-50: #FFFDF0;
+	--yellow-100: #FFF9CC;
+	--yellow-200: #FFF099;
+	--yellow-300: #FFE466;
+	--yellow-400: #FFD633;
+	--yellow-500: #FFC837;
+	--yellow-600: #E5A800;
+	--yellow-700: #B88200;
+	--yellow-800: #8A5E00;
+	--yellow-900: #5C3C00;
+	--yellow-950: #3B2400;
+
+	/* Slate Neutral Scale */
+	--slate-50: #F8FAFC;
+	--slate-100: #F1F5F9;
+	--slate-200: #E2E8F0;
+	--slate-300: #CBD5E1;
+	--slate-400: #94A3B8;
+	--slate-500: #64748B;
+	--slate-600: #475569;
+	--slate-700: #334155;
+	--slate-800: #1E293B;
+	--slate-900: #0F172A;
+	--slate-950: #020617;
+
+	/* توکن‌های معنایی حالت روشن (Light Mode Semantic Tokens) */
+	--color-bg: var(--slate-50);
+	--color-surface: var(--slate-100);
+	--color-card: var(--slate-50);
+	--color-card-alt: var(--blue-50);
+	--color-fg: var(--slate-900);
+	--color-heading: var(--slate-950);
+
+	--color-primary: var(--blue-500);
+	--color-primary-hover: var(--blue-600);
+	--color-primary-active: var(--blue-700);
+	--color-primary-deep: var(--blue-800);
+	--color-primary-subtle: var(--blue-100);
+	--color-primary-border: var(--blue-200);
+	--color-primary-fg: var(--slate-50);
+
+	--color-accent: var(--yellow-500);
+	--color-accent-hover: var(--yellow-400);
+	--color-accent-active: var(--yellow-600);
+	--color-accent-subtle: var(--yellow-50);
+	--color-accent-soft: var(--yellow-100);
+	--color-accent-border: var(--yellow-300);
+	--color-accent-fg: var(--yellow-950);
+
+	--color-secondary: var(--slate-100);
+	--color-secondary-fg: var(--slate-800);
+	--color-muted: var(--slate-200);
+	--color-muted-fg: var(--slate-600);
+	--color-subtle-fg: var(--slate-500);
+
+	--color-border: var(--slate-200);
+	--color-border-strong: var(--slate-300);
+	--color-input-bg: var(--slate-50);
+	--color-ring: var(--blue-500);
+
+	--color-disabled-bg: var(--slate-200);
+	--color-disabled-fg: var(--slate-400);
+
+	--color-ink: var(--blue-950);
+	--color-ink-surface: var(--blue-900);
+	--color-ink-elevated: var(--blue-800);
+	--color-ink-border: var(--slate-800);
+	--color-ink-fg: var(--slate-50);
+	--color-ink-muted: var(--blue-300);
+
+	--color-status-info-bg: var(--blue-50);
+	--color-status-info-border: var(--blue-300);
+	--color-status-info-fg: var(--blue-700);
+
+	--color-status-warn-bg: var(--yellow-100);
+	--color-status-warn-border: var(--yellow-400);
+	--color-status-warn-fg: var(--yellow-900);
+
+	--color-danger: var(--yellow-800);
+	--color-danger-bg: var(--yellow-50);
+	--color-danger-border: var(--yellow-300);
+
+	--color-success: var(--blue-600);
+	--color-success-bg: var(--blue-50);
+	--color-success-border: var(--blue-200);
+
+	/* سازگاری با نام متغیرهای قدیمی افزونه */
+	--derak-navy: var(--color-primary);
+	--derak-ink: var(--color-ink);
+	--derak-gold: var(--color-accent);
+	--derak-stone-bg: var(--color-bg);
+	--derak-stone-border: var(--color-border);
+
+	/* سیستم فونت مرکزی */
+	--font-plex-arabic: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+	--font-sans: var(--font-plex-arabic);
+	--font-mono: var(--font-plex-arabic);
+
+	--radius-sm: 0.375rem;
+	--radius-md: 0.5rem;
+	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
+	--radius-2xl: 1.25rem;
+	--shadow-card: 0 4px 20px -2px rgba(2, 6, 23, 0.06);
+	--shadow-elevated: 0 18px 40px -12px rgba(0, 20, 59, 0.18);
+}
+
+/* ==========================================================================
+   2.1 توکن‌های معنایی حالت تیره (Dark Mode Semantic Tokens)
+   ========================================================================== */
+html.dark,
+[data-theme="dark"],
+body.dark {
+	color-scheme: dark;
+
+	--color-bg: var(--slate-950);
+	--color-surface: var(--slate-900);
+	--color-card: var(--slate-900);
+	--color-card-alt: var(--blue-950);
+	--color-fg: var(--slate-100);
+	--color-heading: var(--slate-50);
+
+	--color-primary: var(--blue-500);
+	--color-primary-hover: var(--blue-400);
+	--color-primary-active: var(--blue-600);
+	--color-primary-deep: var(--blue-300);
+	--color-primary-subtle: var(--blue-900);
+	--color-primary-border: var(--blue-800);
+	--color-primary-fg: var(--slate-50);
+
+	--color-accent: var(--yellow-500);
+	--color-accent-hover: var(--yellow-400);
+	--color-accent-active: var(--yellow-600);
+	--color-accent-subtle: var(--yellow-950);
+	--color-accent-soft: var(--yellow-900);
+	--color-accent-border: var(--yellow-700);
+	--color-accent-fg: var(--yellow-950);
+
+	--color-secondary: var(--slate-800);
+	--color-secondary-fg: var(--slate-100);
+	--color-muted: var(--slate-800);
+	--color-muted-fg: var(--slate-400);
+	--color-subtle-fg: var(--slate-500);
+
+	--color-border: var(--slate-800);
+	--color-border-strong: var(--slate-700);
+	--color-input-bg: var(--slate-950);
+	--color-ring: var(--blue-400);
+
+	--color-disabled-bg: var(--slate-800);
+	--color-disabled-fg: var(--slate-600);
+
+	--color-ink: var(--blue-950);
+	--color-ink-surface: var(--blue-900);
+	--color-ink-elevated: var(--blue-800);
+	--color-ink-border: var(--blue-800);
+	--color-ink-fg: var(--slate-50);
+	--color-ink-muted: var(--blue-300);
+
+	--color-status-info-bg: var(--blue-950);
+	--color-status-info-border: var(--blue-700);
+	--color-status-info-fg: var(--blue-300);
+
+	--color-status-warn-bg: var(--yellow-950);
+	--color-status-warn-border: var(--yellow-700);
+	--color-status-warn-fg: var(--yellow-200);
+
+	--color-danger: var(--yellow-400);
+	--color-danger-bg: var(--yellow-950);
+	--color-danger-border: var(--yellow-800);
+
+	--color-success: var(--blue-400);
+	--color-success-bg: var(--blue-950);
+	--color-success-border: var(--blue-800);
+
+	--shadow-card: 0 4px 20px -2px rgba(2, 6, 23, 0.45);
+	--shadow-elevated: 0 18px 40px -12px rgba(2, 6, 23, 0.7);
+}
+
+/* ==========================================================================
+   3. ریست، فوکوس دسترس‌پذیر و تایپوگرافی یکپارچه (IBM Plex Sans Arabic)
+   ========================================================================== */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	font-family: var(--font-plex-arabic);
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background-color: var(--color-bg);
+	color: var(--color-fg);
+	font-family: var(--font-plex-arabic);
+	line-height: 1.75;
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, dl, dt, dd,
+label, legend, figcaption, blockquote {
+	font-family: var(--font-plex-arabic);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 0;
+	line-height: 1.35;
+	font-weight: 700;
+	color: var(--color-heading);
+}
+
+/* ارث‌بری صریح فونت در تمام فرم‌ها، جداول، دیالوگ‌ها و ویجت‌های المنتور/ووکامرس */
+button,
+input,
+select,
+textarea,
+optgroup,
+table,
+th,
+td,
+dialog,
+code,
+kbd,
+samp,
+pre,
+.woocommerce button.button,
+.woocommerce a.button,
+.woocommerce input.button,
+.elementor-widget,
+.elementor-widget-container,
+.elementor-button {
+	font-family: var(--font-plex-arabic) !important;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: 2px solid var(--color-ring);
+	outline-offset: 2px;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+.font-mono {
+	font-family: var(--font-plex-arabic);
+	font-feature-settings: "tnum" 1;
+}
+
+.deraak-container {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.25rem;
+}
+
+.bg-grid {
+	background-image:
+		linear-gradient(to right, rgba(112, 184, 255, 0.08) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(112, 184, 255, 0.08) 1px, transparent 1px);
+	background-size: 40px 40px;
+}
+
+/* ==========================================================================
+   4. نوار ابزار بالایی، هدر اصلی، تغییر تم (تیره/روشن) و منوی موبایل
+   ========================================================================== */
+.deraak-topbar {
+	background-color: var(--slate-950);
+	color: var(--slate-300);
+	font-size: 0.78rem;
+	border-bottom: 1px solid var(--blue-900);
+	padding: 0.45rem 0;
+}
+
+.deraak-topbar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.deraak-topbar__right,
+.deraak-topbar__left {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.deraak-topbar__sync-link {
+	background: none;
+	border: none;
+	color: var(--yellow-400);
+	cursor: pointer;
+	font-size: 0.76rem;
+	font-weight: 600;
+	padding: 0;
+}
+
+.deraak-topbar__sync-link:hover {
+	color: var(--yellow-300);
+}
+
+.deraak-topbar__phone {
+	color: var(--slate-50);
+	font-weight: 600;
+}
+
+.deraak-topbar__phone:hover {
+	color: var(--blue-300);
+}
+
+.deraak-network-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.15rem 0.65rem;
+	border-radius: 999px;
+	font-size: 0.72rem;
+	font-weight: 600;
+	background: var(--blue-900);
+	color: var(--blue-300);
+	border: 1px solid var(--blue-700);
+}
+
+.deraak-network-badge.is-offline {
+	background: var(--yellow-950);
+	color: var(--yellow-400);
+	border-color: var(--yellow-700);
+}
+
+.deraak-header {
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	background-color: var(--blue-950);
+	backdrop-filter: blur(10px);
+	color: var(--slate-50);
+	border-bottom: 1px solid var(--blue-900);
+}
+
+.deraak-header__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 4.5rem;
+	gap: 1rem;
+}
+
+.deraak-brand {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.deraak-brand__badge {
+	width: 2.6rem;
+	height: 2.6rem;
+	border-radius: var(--radius-md);
+	background-color: var(--color-accent);
+	color: var(--color-accent-fg);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 0.95rem;
+	flex-shrink: 0;
+}
+
+.deraak-brand__title {
+	font-weight: 700;
+	font-size: 1rem;
+	color: var(--slate-50);
+	display: block;
+	line-height: 1.3;
+}
+
+.deraak-brand__subtitle {
+	font-size: 0.72rem;
+	color: var(--blue-300);
+	display: block;
+}
+
+.deraak-nav__list {
+	display: flex;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	gap: 1.5rem;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.deraak-nav__list a {
+	color: var(--slate-200);
+	padding: 0.35rem 0;
+}
+
+.deraak-nav__list a:hover,
+.deraak-nav__list .current-menu-item > a {
+	color: var(--yellow-400);
+}
+
+.deraak-header__actions {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+}
+
+.deraak-theme-toggle {
+	background: var(--blue-900);
+	border: 1px solid var(--blue-800);
+	color: var(--yellow-400);
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: var(--radius-md);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size: 0.95rem;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.deraak-theme-toggle:hover {
+	background: var(--blue-800);
+	border-color: var(--blue-600);
+}
+
+.deraak-mobile-toggle {
+	display: none;
+	background: var(--blue-900);
+	border: 1px solid var(--blue-800);
+	color: var(--slate-50);
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: var(--radius-md);
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.deraak-mobile-drawer {
+	display: none;
+	background: var(--blue-950);
+	border-bottom: 1px solid var(--blue-800);
+	padding: 1rem 1.25rem 1.25rem;
+}
+
+.deraak-mobile-drawer.is-open {
+	display: block;
+}
+
+.deraak-mobile-drawer .deraak-nav__list {
+	flex-direction: column;
+	gap: 0.65rem;
+}
+
+.deraak-mobile-drawer .deraak-nav__list a {
+	display: block;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--radius-md);
+	background: var(--blue-900);
+	color: var(--slate-100);
+}
+
+/* ==========================================================================
+   5. دکمه‌ها (Buttons — Tech Blue 500 Primary & Industrial Yellow 500 Accent)
+   ========================================================================== */
+.deraak-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1.15rem;
+	border-radius: var(--radius-md);
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition: all 0.15s ease;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.deraak-btn:disabled {
+	background-color: var(--color-disabled-bg) !important;
+	color: var(--color-disabled-fg) !important;
+	border-color: var(--color-border) !important;
+	cursor: not-allowed;
+}
+
+.deraak-btn--primary {
+	background-color: var(--color-primary);
+	color: var(--color-primary-fg);
+}
+
+.deraak-btn--primary:hover:not(:disabled) {
+	background-color: var(--color-primary-hover);
+}
+
+.deraak-btn--primary:active:not(:disabled) {
+	background-color: var(--color-primary-active);
+}
+
+.deraak-btn--accent {
+	background-color: var(--color-accent);
+	color: var(--color-accent-fg);
+	font-weight: 700;
+}
+
+.deraak-btn--accent:hover:not(:disabled) {
+	background-color: var(--color-accent-hover);
+}
+
+.deraak-btn--accent:active:not(:disabled) {
+	background-color: var(--color-accent-active);
+}
+
+.deraak-btn--outline {
+	background-color: var(--color-card);
+	border-color: var(--color-border-strong);
+	color: var(--color-fg);
+}
+
+.deraak-btn--outline:hover:not(:disabled) {
+	border-color: var(--color-primary);
+	background-color: var(--color-primary-subtle);
+	color: var(--color-primary-active);
+}
+
+.deraak-btn--ghost-light {
+	background-color: var(--blue-900);
+	border-color: var(--blue-700);
+	color: var(--slate-50);
+}
+
+.deraak-btn--ghost-light:hover:not(:disabled) {
+	background-color: var(--blue-800);
+	border-color: var(--blue-500);
+}
+
+.deraak-btn--full {
+	width: 100%;
+}
+
+.deraak-badge-count {
+	background-color: var(--blue-950);
+	color: var(--yellow-400);
+	padding: 0.05rem 0.45rem;
+	border-radius: var(--radius-sm);
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+/* ==========================================================================
+   6. بخش Hero صنعتی (صفحه اصلی)
+   ========================================================================== */
+.deraak-hero {
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(135deg, var(--blue-950) 0%, var(--blue-900) 60%, var(--slate-900) 100%);
+	color: var(--slate-50);
+	border-bottom: 1px solid var(--blue-800);
+	padding: 3.5rem 0 4rem;
+}
+
+.deraak-hero__glow {
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(circle at 20% 20%, rgba(0, 141, 255, 0.22), rgba(255, 200, 55, 0.1) 40%, transparent 70%);
+	pointer-events: none;
+}
+
+.deraak-hero__grid {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1.2fr 0.8fr;
+	gap: 2.5rem;
+	align-items: center;
+}
+
+.deraak-hero__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.35rem 0.85rem;
+	border-radius: var(--radius-sm);
+	background: var(--blue-900);
+	border: 1px solid var(--blue-700);
+	color: var(--yellow-400);
+	font-size: 0.78rem;
+	font-weight: 600;
+	margin-bottom: 1.25rem;
+}
+
+.deraak-hero__title {
+	font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+	color: var(--slate-50);
+	line-height: 1.3;
+	margin-bottom: 1rem;
+}
+
+.deraak-hero__lead {
+	font-size: 1rem;
+	color: var(--slate-200);
+	max-width: 640px;
+	margin-bottom: 1.75rem;
+}
+
+.deraak-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin-bottom: 2rem;
+}
+
+.deraak-hero__stats {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.85rem;
+	border-top: 1px solid var(--blue-800);
+	padding-top: 1.5rem;
+}
+
+.deraak-hero__stat-label {
+	font-size: 0.75rem;
+	color: var(--blue-300);
+	display: block;
+}
+
+.deraak-hero__stat-value {
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--slate-50);
+	margin-top: 0.2rem;
+	display: block;
+}
+
+.deraak-hero__card {
+	background: var(--blue-900);
+	border: 1px solid var(--blue-700);
+	border-radius: var(--radius-xl);
+	padding: 1.5rem;
+	box-shadow: var(--shadow-elevated);
+}
+
+/* ==========================================================================
+   7. کارت‌های محصول و شبکه کاتالوگ (Product Grid & Cards)
+   ========================================================================== */
+.deraak-section {
+	padding: 4rem 0;
+}
+
+.deraak-section--muted {
+	background-color: var(--color-surface);
+	border-top: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.deraak-section__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 2rem;
+}
+
+.deraak-section__eyebrow {
+	font-size: 0.78rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	display: block;
+	margin-bottom: 0.35rem;
+}
+
+.deraak-section__title {
+	font-size: clamp(1.35rem, 2.4vw, 2rem);
+	margin: 0;
+	color: var(--color-heading);
+}
+
+.deraak-catalog-toolbar {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-xl);
+	padding: 1.25rem;
+	margin-bottom: 1.75rem;
+	box-shadow: var(--shadow-card);
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.deraak-catalog-toolbar__top {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 0.85rem;
+	align-items: center;
+}
+
+.deraak-filter-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.deraak-filter-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.4rem 0.85rem;
+	border-radius: var(--radius-md);
+	font-size: 0.82rem;
+	font-weight: 600;
+	background: var(--color-surface);
+	color: var(--color-fg);
+	border: 1px solid var(--color-border-strong);
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.deraak-filter-pill:hover {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+	background: var(--color-primary-subtle);
+}
+
+.deraak-filter-pill.is-active {
+	background: var(--color-primary);
+	color: var(--color-primary-fg);
+	border-color: var(--color-primary);
+}
+
+.deraak-products-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+	gap: 1.25rem;
+}
+
+.deraak-product-card {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-xl);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow: hidden;
+	transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+	box-shadow: var(--shadow-card);
+}
+
+.deraak-product-card:hover {
+	transform: translateY(-3px);
+	border-color: var(--color-primary);
+	box-shadow: var(--shadow-elevated);
+}
+
+.deraak-product-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	padding: 0.85rem 1rem;
+	background: var(--color-surface);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.deraak-product-card__brand {
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var(--color-primary-active);
+	background: var(--color-primary-subtle);
+	border: 1px solid var(--color-primary-border);
+	padding: 0.18rem 0.55rem;
+	border-radius: var(--radius-sm);
+}
+
+html.dark .deraak-product-card__brand,
+[data-theme="dark"] .deraak-product-card__brand {
+	color: var(--blue-300);
+}
+
+.deraak-product-card__model {
+	font-size: 0.78rem;
+	font-weight: 700;
+	color: var(--color-heading);
+	background: var(--color-card);
+	border: 1px solid var(--color-border-strong);
+	padding: 0.15rem 0.5rem;
+	border-radius: var(--radius-sm);
+}
+
+.deraak-product-card__image-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 200px;
+	padding: 1.25rem;
+	background: linear-gradient(180deg, var(--color-card) 0%, var(--color-surface) 100%);
+	border-bottom: 1px solid var(--color-border);
+	position: relative;
+}
+
+.deraak-product-card__image {
+	max-height: 165px;
+	width: auto;
+	object-fit: contain;
+	transition: transform 0.25s ease;
+}
+
+.deraak-product-card:hover .deraak-product-card__image {
+	transform: scale(1.04);
+}
+
+.deraak-product-card__placeholder {
+	font-weight: 700;
+	font-size: 1.1rem;
+	color: var(--color-muted-fg);
+	background: var(--color-muted);
+	padding: 1rem 1.5rem;
+	border-radius: var(--radius-md);
+}
+
+.deraak-product-card__body {
+	padding: 1.15rem;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.deraak-product-card__cat-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	margin-bottom: 0.45rem;
+}
+
+.deraak-product-card__cat {
+	font-size: 0.74rem;
+	color: var(--color-muted-fg);
+	font-weight: 500;
+}
+
+.deraak-product-card__lead {
+	font-size: 0.7rem;
+	font-weight: 600;
+	color: var(--color-status-info-fg);
+	background: var(--color-status-info-bg);
+	border: 1px solid var(--color-status-info-border);
+	padding: 0.1rem 0.45rem;
+	border-radius: var(--radius-sm);
+}
+
+.deraak-product-card__title {
+	font-size: 1rem;
+	font-weight: 700;
+	margin: 0 0 0.5rem;
+	line-height: 1.45;
+	color: var(--color-heading);
+}
+
+.deraak-product-card__title a:hover {
+	color: var(--color-primary);
+}
+
+.deraak-product-card__excerpt {
+	font-size: 0.82rem;
+	color: var(--color-muted-fg);
+	margin: 0 0 0.85rem;
+	line-height: 1.65;
+}
+
+.deraak-product-card__specs {
+	margin-top: auto;
+	padding-top: 0.75rem;
+	border-top: 1px dashed var(--color-border-strong);
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+.deraak-product-card__spec-item {
+	display: flex;
+	justify-content: space-between;
+	font-size: 0.75rem;
+	gap: 0.5rem;
+}
+
+.deraak-product-card__spec-key {
+	color: var(--color-muted-fg);
+}
+
+.deraak-product-card__spec-val {
+	font-weight: 600;
+	color: var(--color-fg);
+}
+
+.deraak-product-card__footer {
+	padding: 0.85rem 1.15rem;
+	background: var(--color-surface);
+	border-top: 1px solid var(--color-border);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.55rem;
+}
+
+/* ==========================================================================
+   8. صفحه تک‌محصول فنی ووکامرس (Single Product Datasheet Layout)
+   ========================================================================== */
+.deraak-breadcrumb {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.45rem;
+	font-size: 0.82rem;
+	color: var(--color-muted-fg);
+	margin-bottom: 1.5rem;
+}
+
+.deraak-breadcrumb a:hover {
+	color: var(--color-primary);
+}
+
+.deraak-single-product__grid {
+	display: grid;
+	grid-template-columns: 5fr 7fr;
+	gap: 2rem;
+	align-items: start;
+}
+
+.deraak-single-product__media-card,
+.deraak-single-product__info-card {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-xl);
+	padding: 1.75rem;
+	box-shadow: var(--shadow-card);
+}
+
+.deraak-single-product__gallery {
+	background: linear-gradient(180deg, var(--color-card) 0%, var(--color-surface) 100%);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 300px;
+	margin-bottom: 1.25rem;
+}
+
+.deraak-single-product__meta-list {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0.75rem;
+	margin-bottom: 1.25rem;
+}
+
+.deraak-single-product__meta-box {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	padding: 0.65rem 0.85rem;
+}
+
+.deraak-single-product__meta-label {
+	font-size: 0.72rem;
+	color: var(--color-muted-fg);
+	display: block;
+}
+
+.deraak-single-product__meta-val {
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: var(--color-fg);
+}
+
+.deraak-highlights-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.75rem;
+	margin: 1.25rem 0;
+}
+
+.deraak-highlight-box {
+	background: var(--color-card-alt);
+	border: 1px solid var(--color-primary-border);
+	border-radius: var(--radius-md);
+	padding: 0.75rem;
+}
+
+.deraak-highlight-box__label {
+	font-size: 0.72rem;
+	color: var(--color-muted-fg);
+	display: block;
+}
+
+.deraak-highlight-box__val {
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: var(--color-primary-active);
+	margin-top: 0.2rem;
+	display: block;
+}
+
+html.dark .deraak-highlight-box__val,
+[data-theme="dark"] .deraak-highlight-box__val {
+	color: var(--blue-300);
+}
+
+.deraak-inquiry-box {
+	background: var(--blue-950);
+	color: var(--slate-50);
+	border: 1px solid var(--blue-800);
+	border-radius: var(--radius-lg);
+	padding: 1.35rem;
+	margin: 1.5rem 0;
+}
+
+.deraak-inquiry-box__controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: center;
+	margin-top: 1rem;
+}
+
+.deraak-qty-input {
+	width: 90px;
+	height: 42px;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--blue-700);
+	background: var(--blue-900);
+	color: var(--slate-50);
+	text-align: center;
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+
+.deraak-spec-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1rem;
+	font-size: 0.88rem;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	overflow: hidden;
+}
+
+.deraak-spec-table th,
+.deraak-spec-table td {
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.deraak-spec-table th {
+	width: 38%;
+	background: var(--color-surface);
+	font-weight: 600;
+	color: var(--color-fg);
+}
+
+.deraak-spec-table td {
+	background: var(--color-card);
+	color: var(--color-fg);
+}
+
+.deraak-spec-table tr:hover td {
+	background: var(--color-card-alt);
+}
+
+.deraak-spec-table tr:last-child th,
+.deraak-spec-table tr:last-child td {
+	border-bottom: none;
+}
+
+/* ==========================================================================
+   9. ویجت‌های المنتور (جستجوی زنده، دسته‌بندی‌ها، برندها، کاتالوگ آفلاین PWA)
+   ========================================================================== */
+.deraak-live-search {
+	position: relative;
+	width: 100%;
+}
+
+.deraak-live-search__input-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.deraak-live-search__icon {
+	position: absolute;
+	right: 0.9rem;
+	color: var(--color-subtle-fg);
+	pointer-events: none;
+}
+
+.deraak-live-search__input {
+	width: 100%;
+	height: 3rem;
+	padding: 0.5rem 2.75rem 0.5rem 6.5rem;
+	border: 1px solid var(--color-border-strong);
+	border-radius: var(--radius-md);
+	background: var(--color-input-bg);
+	color: var(--color-fg);
+	font-size: 0.9rem;
+}
+
+.deraak-live-search__input:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(0, 141, 255, 0.2);
+}
+
+.deraak-live-search__badge {
+	position: absolute;
+	left: 0.65rem;
+	font-size: 0.7rem;
+	font-weight: 600;
+	background: var(--color-primary-subtle);
+	color: var(--color-primary-active);
+	padding: 0.2rem 0.5rem;
+	border-radius: var(--radius-sm);
+}
+
+html.dark .deraak-live-search__badge,
+[data-theme="dark"] .deraak-live-search__badge {
+	color: var(--blue-300);
+}
+
+.deraak-live-search__results {
+	position: absolute;
+	top: calc(100% + 0.4rem);
+	right: 0;
+	left: 0;
+	background: var(--color-card);
+	border: 1px solid var(--color-border-strong);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-elevated);
+	z-index: 50;
+	max-height: 360px;
+	overflow-y: auto;
+	padding: 0.5rem;
+}
+
+.deraak-live-search__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.65rem 0.85rem;
+	border-radius: var(--radius-md);
+	color: var(--color-fg);
+}
+
+.deraak-live-search__item:hover {
+	background: var(--color-card-alt);
+}
+
+.deraak-categories-grid,
+.deraak-brands-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 1.15rem;
+}
+
+.deraak-category-card,
+.deraak-brand-card {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-xl);
+	padding: 1.35rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	box-shadow: var(--shadow-card);
+	transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.deraak-category-card:hover,
+.deraak-brand-card:hover {
+	transform: translateY(-2px);
+	border-color: var(--color-primary);
+}
+
+.deraak-brand-card__top,
+.deraak-category-card__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 0.85rem;
+}
+
+.deraak-brand-card__abbr {
+	background: var(--blue-950);
+	color: var(--yellow-400);
+	font-weight: 700;
+	padding: 0.35rem 0.7rem;
+	border-radius: var(--radius-sm);
+	font-size: 0.85rem;
+}
+
+.deraak-brand-card__country,
+.deraak-category-card__count {
+	font-size: 0.74rem;
+	background: var(--color-surface);
+	color: var(--color-muted-fg);
+	border: 1px solid var(--color-border);
+	padding: 0.2rem 0.55rem;
+	border-radius: var(--radius-sm);
+	font-weight: 600;
+}
+
+.deraak-pwa-sync-box {
+	background: linear-gradient(135deg, var(--blue-950) 0%, var(--blue-900) 100%);
+	color: var(--slate-50);
+	border-radius: var(--radius-xl);
+	padding: 1.5rem 1.75rem;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.25rem;
+	border: 1px solid var(--blue-800);
+}
+
+.deraak-pwa-sync-box__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
 }
 
-.derak-brand-titles {
-  display: flex;
-  flex-direction: column;
+/* ==========================================================================
+   10. بخش تماس با ما و فرم درخواست مشاوره با احراز هویت پیامکی کاوه‌نگار (OTP)
+   ========================================================================== */
+.deraak-contact-section {
+	padding: 4rem 0;
 }
 
-.derak-brand-name {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.2;
+.deraak-contact-grid {
+	display: grid;
+	grid-template-columns: 5fr 7fr;
+	gap: 1.75rem;
+	align-items: stretch;
 }
-
-.derak-brand-sub {
-  font-size: 11px;
-  color: var(--derak-blue-periwinkle);
-}
-
-.derak-search-form {
-  flex: 1;
-  max-width: 480px;
-  position: relative;
+
+.deraak-contact-info-card {
+	background: linear-gradient(160deg, var(--blue-950) 0%, var(--blue-900) 100%);
+	color: var(--slate-50);
+	border: 1px solid var(--blue-800);
+	border-radius: var(--radius-2xl);
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.deraak-contact-badge {
+	display: inline-block;
+	font-size: 0.76rem;
+	font-weight: 700;
+	color: var(--yellow-400);
+	margin-bottom: 0.5rem;
+}
+
+.deraak-contact-title {
+	color: var(--slate-50);
+	font-size: 1.5rem;
+	margin-bottom: 0.75rem;
+}
+
+.deraak-contact-desc {
+	color: var(--slate-300);
+	font-size: 0.9rem;
+	margin-bottom: 1.5rem;
+}
+
+.deraak-contact-channels {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-bottom: 1.5rem;
+}
+
+.deraak-contact-channel {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.85rem 1rem;
+	border-radius: var(--radius-lg);
+	background: var(--blue-900);
+	border: 1px solid var(--blue-800);
+}
+
+.deraak-contact-channel:hover {
+	background: var(--blue-800);
+	border-color: var(--blue-600);
+}
+
+.deraak-contact-channel__label {
+	font-size: 0.74rem;
+	color: var(--blue-300);
+	display: block;
+}
+
+.deraak-contact-channel__val {
+	font-size: 0.92rem;
+	color: var(--slate-50);
+}
+
+.deraak-contact-channel__action {
+	font-size: 0.78rem;
+	color: var(--yellow-400);
+	font-weight: 600;
+}
+
+.deraak-contact-security-box {
+	background: var(--blue-900);
+	border: 1px solid var(--blue-800);
+	border-radius: var(--radius-lg);
+	padding: 1rem;
+	font-size: 0.8rem;
+	color: var(--slate-200);
+}
+
+.deraak-contact-form-card {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-2xl);
+	padding: 2rem;
+	box-shadow: var(--shadow-card);
+}
+
+.deraak-contact-form__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-bottom: 1.15rem;
+	margin-bottom: 1.35rem;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.deraak-contact-steps {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
 }
 
-.derak-search-input {
-  width: 100%;
-  height: 42px;
-  background-color: #FFFFFF;
-  border: 1px solid var(--derak-blue-periwinkle);
-  border-radius: 8px;
-  padding: 0 40px 0 16px;
-  font-size: 13px;
-  font-family: inherit;
-  color: var(--derak-text);
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.derak-search-input:focus {
-  border-color: var(--derak-accent);
-  box-shadow: 0 0 0 2px rgba(251, 218, 88, 0.35);
-}
-
-.derak-search-icon {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--derak-stone-muted);
-  pointer-events: none;
+.deraak-step-pill {
+	font-size: 0.75rem;
+	font-weight: 600;
+	padding: 0.25rem 0.65rem;
+	border-radius: var(--radius-sm);
+	background: var(--color-surface);
+	color: var(--color-muted-fg);
+	border: 1px solid var(--color-border);
 }
 
-.derak-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.deraak-step-pill.is-active {
+	background: var(--color-primary);
+	color: var(--color-primary-fg);
+	border-color: var(--color-primary);
 }
 
-.derak-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid transparent;
+.deraak-form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
 }
 
-.derak-btn-accent {
-  background-color: var(--derak-accent);
-  color: var(--derak-gold-black);
-  border-color: var(--derak-gold-warm);
+.deraak-form-group {
+	margin-bottom: 1rem;
 }
 
-.derak-btn-accent:hover {
-  background-color: var(--derak-gold-warm);
+.deraak-form-group label {
+	display: block;
+	font-size: 0.82rem;
+	font-weight: 600;
+	margin-bottom: 0.35rem;
+	color: var(--color-fg);
 }
 
-.derak-btn-primary {
-  background-color: var(--derak-primary);
-  color: #FFFFFF;
-  border-color: var(--derak-blue-vibrant);
+.deraak-form-group input,
+.deraak-form-group textarea,
+.deraak-form-group select {
+	width: 100%;
+	padding: 0.65rem 0.85rem;
+	border: 1px solid var(--color-border-strong);
+	border-radius: var(--radius-md);
+	background: var(--color-input-bg);
+	color: var(--color-fg);
+	font-size: 0.9rem;
 }
 
-.derak-btn-primary:hover {
-  background-color: var(--derak-primary-hover);
+.deraak-form-group input:focus,
+.deraak-form-group textarea:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(0, 141, 255, 0.16);
 }
 
-.derak-btn-outline {
-  background-color: #FFFFFF;
-  color: var(--derak-primary);
-  border-color: var(--derak-blue-periwinkle);
+.deraak-form-hint {
+	display: block;
+	font-size: 0.73rem;
+	color: var(--color-muted-fg);
+	margin-top: 0.25rem;
 }
 
-.derak-btn-outline:hover {
-  background-color: var(--derak-blue-ice);
-}
-
-/* Offline Indicator Bar */
-.derak-offline-banner {
-  background-color: #BA1A1A;
-  color: #FFFFFF;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
+.deraak-otp-summary-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: var(--color-status-info-bg);
+	border: 1px solid var(--color-status-info-border);
+	color: var(--color-status-info-fg);
+	padding: 0.75rem 1rem;
+	border-radius: var(--radius-md);
+	margin-bottom: 1rem;
+	font-size: 0.85rem;
+}
+
+.deraak-link-btn {
+	background: none;
+	border: none;
+	color: var(--color-primary);
+	font-weight: 700;
+	font-size: 0.8rem;
+	cursor: pointer;
+	padding: 0.2rem 0.5rem;
+}
+
+.deraak-link-btn:hover {
+	color: var(--color-primary-hover);
+	text-decoration: underline;
+}
+
+.deraak-sandbox-notice {
+	background: var(--color-status-warn-bg);
+	border: 1px solid var(--color-status-warn-border);
+	color: var(--color-status-warn-fg);
+	padding: 0.65rem 0.9rem;
+	border-radius: var(--radius-md);
+	font-size: 0.82rem;
+	margin-bottom: 1rem;
+}
+
+.deraak-otp-input {
+	text-align: center;
+	font-size: 1.45rem !important;
+	font-weight: 700;
+	letter-spacing: 0.45em;
+}
+
+.deraak-otp-timer-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 0.8rem;
+	color: var(--color-muted-fg);
+	margin-bottom: 1rem;
+}
+
+.deraak-otp-actions {
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
 
-.derak-offline-banner.hidden {
-  display: none !important;
+.deraak-form-feedback {
+	margin-top: 0.85rem;
+	padding: 0.65rem 0.9rem;
+	border-radius: var(--radius-md);
+	font-size: 0.84rem;
+	font-weight: 600;
 }
 
-/* Bento Category Cards */
-.derak-bento-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
-  margin: 20px 0;
-}
-
-.derak-bento-card {
-  background-color: var(--derak-surface);
-  border: 1px solid var(--derak-border);
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-
-.derak-bento-card:hover {
-  border-color: var(--derak-blue-lavender);
-  box-shadow: 0 4px 12px rgba(19, 82, 223, 0.08);
-  transform: translateY(-2px);
-}
-
-.derak-bento-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.derak-bento-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  background-color: var(--derak-blue-ice);
-  border: 1px solid var(--derak-blue-periwinkle);
-  color: var(--derak-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.derak-bento-count {
-  font-size: 11px;
-  font-family: var(--derak-font-mono);
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 20px;
-  background-color: var(--derak-blue-ice);
-  color: var(--derak-primary);
-  border: 1px solid var(--derak-blue-periwinkle);
-}
+.deraak-form-feedback.is-error {
+	background: var(--color-danger-bg);
+	border: 1px solid var(--color-danger-border);
+	color: var(--color-danger);
+}
+
+.deraak-form-feedback.is-success {
+	background: var(--color-success-bg);
+	border: 1px solid var(--color-success-border);
+	color: var(--color-success);
+}
+
+/* ==========================================================================
+   11. دراور لیست استعلام (RFQ Drawer) و مودال مشاهده سریع محصول (Quick View)
+   ========================================================================== */
+.deraak-rfq-drawer,
+.deraak-quick-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.deraak-quick-modal {
+	justify-content: center;
+	padding: 1rem;
+}
+
+.deraak-rfq-drawer[hidden],
+.deraak-quick-modal[hidden] {
+	display: none !important;
+}
+
+.deraak-rfq-drawer__backdrop,
+.deraak-quick-modal__backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(2, 6, 23, 0.68);
+	backdrop-filter: blur(3px);
+}
+
+.deraak-rfq-drawer__panel {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	max-width: 480px;
+	height: 100%;
+	background: var(--color-card);
+	display: flex;
+	flex-direction: column;
+	box-shadow: -10px 0 35px rgba(2, 6, 23, 0.35);
+}
+
+.deraak-rfq-drawer__header {
+	padding: 1.25rem 1.5rem;
+	background: var(--blue-950);
+	color: var(--slate-50);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid var(--blue-800);
+}
+
+.deraak-rfq-drawer__header h3 {
+	color: var(--slate-50);
+	margin: 0;
+	font-size: 1.1rem;
+}
+
+.deraak-rfq-drawer__sub {
+	margin: 0.15rem 0 0;
+	font-size: 0.75rem;
+	color: var(--blue-300);
+}
+
+.deraak-rfq-drawer__close {
+	background: var(--blue-900);
+	border: 1px solid var(--blue-700);
+	color: var(--slate-50);
+	width: 2rem;
+	height: 2rem;
+	border-radius: var(--radius-sm);
+	font-size: 1.25rem;
+	cursor: pointer;
+}
+
+.deraak-rfq-drawer__body {
+	padding: 1.25rem 1.5rem;
+	overflow-y: auto;
+	flex: 1;
+}
+
+.deraak-rfq-items {
+	display: flex;
+	flex-direction: column;
+	gap: 0.65rem;
+	margin-bottom: 1.25rem;
+}
 
-.derak-bento-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--derak-primary);
-  margin: 10px 0 4px 0;
-}
-
-.derak-bento-desc {
-  font-size: 12px;
-  color: var(--derak-text-muted);
-  line-height: 1.5;
-  margin: 0;
-}
-
-.derak-bento-tags {
-  margin-top: 12px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background-color: var(--derak-blue-ice);
-  font-size: 11px;
-  font-family: var(--derak-font-mono);
-  color: var(--derak-blue-deep);
-  direction: ltr;
-  text-align: left;
-}
-
-/* Brand Scroller */
-.derak-brands-row {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 8px 0;
-  scrollbar-width: none;
-}
-
-.derak-brands-row::-webkit-scrollbar {
-  display: none;
-}
-
-.derak-brand-pill {
-  flex-shrink: 0;
-  background-color: #FFFFFF;
-  border: 1px solid var(--derak-stone-border);
-  color: var(--derak-text);
-  font-family: var(--derak-font-mono);
-  font-size: 13px;
-  padding: 6px 14px;
-  border-radius: 30px;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.derak-brand-pill:hover, .derak-brand-pill.active {
-  background-color: var(--derak-blue-ice);
-  border-color: var(--derak-blue-vibrant);
-  color: var(--derak-primary);
-}
-
-/* Product Card */
-.derak-products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-  margin: 20px 0;
-}
-
-.derak-product-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--derak-border);
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  transition: all 0.2s;
-  position: relative;
-}
-
-.derak-product-card:hover {
-  border-color: var(--derak-blue-lavender);
-  box-shadow: 0 4px 14px rgba(9, 53, 150, 0.09);
-}
-
-.derak-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.derak-card-brand {
-  font-family: var(--derak-font-mono);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--derak-stone-muted);
-  direction: ltr;
-}
-
-.derak-card-badge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background-color: rgba(251, 218, 88, 0.25);
-  color: var(--derak-gold-bronze);
-  border: 1px solid var(--derak-accent);
-}
-
-.derak-card-media {
-  position: relative;
-  width: 100%;
-  height: 150px;
-  background-color: var(--derak-blue-ice);
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-
-.derak-card-img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  transition: transform 0.3s;
-}
-
-.derak-product-card:hover .derak-card-img {
-  transform: scale(1.05);
-}
-
-.derak-card-tag {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background-color: rgba(3, 26, 84, 0.9);
-  color: var(--derak-accent);
-  font-family: var(--derak-font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  direction: ltr;
-}
-
-.derak-card-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--derak-primary);
-  margin: 0 0 4px 0;
-  line-height: 1.4;
-  text-decoration: none;
-}
-
-.derak-card-model {
-  display: inline-block;
-  background-color: var(--derak-blue-ice);
-  border: 1px solid var(--derak-blue-periwinkle);
-  color: var(--derak-blue-deep);
-  font-family: var(--derak-font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  direction: ltr;
-}
-
-/* 2-Column Param Matrix */
-.derak-param-matrix {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 8px;
-  background-color: var(--derak-blue-ice);
-  border: 1px solid rgba(198, 205, 254, 0.6);
-  border-radius: 6px;
-  padding: 8px;
-  font-size: 11px;
-  margin-bottom: 10px;
-}
-
-.derak-param-label {
-  color: var(--derak-stone-muted);
-}
-
-.derak-param-val {
-  font-weight: 700;
-  color: var(--derak-primary);
-  text-align: left;
-}
-
-.derak-card-leadtime {
-  font-size: 11px;
-  color: var(--derak-stone-muted);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.derak-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid var(--derak-blue-ice);
-}
-
-.derak-btn-icon-add {
-  width: 38px;
-  height: 38px;
-  background-color: var(--derak-accent);
-  color: var(--derak-gold-black);
-  border: 1px solid var(--derak-gold-warm);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
-  flex-shrink: 0;
-  transition: background-color 0.2s;
-}
-
-.derak-btn-icon-add:hover {
-  background-color: var(--derak-gold-warm);
-}
-
-.derak-btn-card-detail {
-  flex: 1;
-  height: 38px;
-  background-color: var(--derak-primary);
-  color: #FFFFFF;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-
-.derak-btn-card-detail:hover {
-  background-color: var(--derak-primary-hover);
-}
-
-/* Single Product Details */
-.derak-single-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 28px;
-  margin: 30px 0;
-}
-
-@media (max-width: 768px) {
-  .derak-single-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-.derak-single-gallery {
-  background-color: #FFFFFF;
-  border: 1px solid var(--derak-border);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-}
-
-.derak-single-img {
-  max-width: 100%;
-  height: auto;
-  max-height: 380px;
-  object-fit: contain;
-}
-
-.derak-single-info {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.derak-specs-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 16px 0;
-  font-size: 13px;
-  background-color: #FFFFFF;
-  border: 1px solid var(--derak-border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.derak-specs-table th, .derak-specs-table td {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--derak-blue-ice);
-  text-align: right;
-}
-
-.derak-specs-table th {
-  background-color: var(--derak-blue-ice);
-  color: var(--derak-primary);
-  font-weight: 700;
-  width: 35%;
-}
-
-/* External Destination Link */
-.derak-btn-external {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background-color: #FFFFFF;
-  color: var(--derak-primary);
-  border: 2px solid var(--derak-blue-vibrant);
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 13px;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.derak-btn-external:hover {
-  background-color: var(--derak-blue-vibrant);
-  color: #FFFFFF;
-}
-
-.derak-btn-external.offline-disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed;
-  border-color: var(--derak-stone-border);
-  color: var(--derak-stone-muted);
-}
-
-/* Mobile Bottom Navigation Dock */
-.derak-bottom-dock {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #FFFFFF;
-  border-top: 1px solid var(--derak-border);
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
-  z-index: 999;
-  padding: 6px 12px;
-}
-
-@media (max-width: 768px) {
-  .derak-bottom-dock {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-  body {
-    padding-bottom: 70px;
-  }
-}
-
-.derak-dock-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  color: var(--derak-stone-muted);
-  text-decoration: none;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 8px;
-  position: relative;
-}
-
-.derak-dock-item.active, .derak-dock-item:hover {
-  color: var(--derak-primary);
-}
-
-.derak-dock-badge {
-  position: absolute;
-  top: 0;
-  left: 6px;
-  background-color: var(--derak-accent);
-  color: var(--derak-gold-black);
-  font-size: 10px;
-  font-family: var(--derak-font-mono);
-  font-weight: 800;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Footer */
-.derak-footer {
-  background-color: var(--derak-primary);
-  color: #FFFFFF;
-  padding: 40px 0 20px 0;
-  margin-top: 50px;
-  border-top: 3px solid var(--derak-accent);
-}
-
-.derak-footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-  font-size: 13px;
-  color: var(--derak-blue-periwinkle);
-}
-
-.derak-iso-badge {
-  display: inline-block;
-  background-color: var(--derak-blue-ice);
-  color: var(--derak-primary);
-  font-family: var(--derak-font-mono);
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--derak-blue-periwinkle);
+.deraak-rfq-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface);
+}
+
+.deraak-rfq-item__controls {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+}
+
+.deraak-rfq-qty-input {
+	width: 62px;
+	padding: 0.25rem 0.4rem;
+	text-align: center;
+	border: 1px solid var(--color-border-strong);
+	border-radius: var(--radius-sm);
+	background: var(--color-input-bg);
+	color: var(--color-fg);
+}
+
+.deraak-rfq-remove-btn {
+	background: var(--color-danger-bg);
+	color: var(--color-danger);
+	border: 1px solid var(--color-danger-border);
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.deraak-quick-modal__dialog {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	max-width: 720px;
+	max-height: 90vh;
+	overflow-y: auto;
+	background: var(--color-card);
+	border-radius: var(--radius-2xl);
+	border: 1px solid var(--color-border);
+	box-shadow: var(--shadow-elevated);
+	padding: 1.75rem;
+}
+
+/* ==========================================================================
+   12. فوتر صنعتی دراک (Footer)
+   ========================================================================== */
+.deraak-footer {
+	background: var(--blue-950);
+	color: var(--slate-200);
+	padding: 3.5rem 0 2rem;
+	border-top: 1px solid var(--blue-800);
+	margin-top: 4rem;
+}
+
+.deraak-footer__grid {
+	display: grid;
+	grid-template-columns: 1.4fr 1fr 1fr;
+	gap: 2.5rem;
+	padding-bottom: 2.5rem;
+	border-bottom: 1px solid var(--blue-900);
+}
+
+.deraak-footer h3,
+.deraak-footer h4 {
+	color: var(--slate-50);
+	margin-bottom: 0.85rem;
+}
+
+.deraak-footer p,
+.deraak-footer li {
+	color: var(--slate-300);
+	font-size: 0.88rem;
+}
+
+.deraak-footer ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.deraak-footer a:hover {
+	color: var(--yellow-400);
+}
+
+.deraak-footer__bottom {
+	padding-top: 1.5rem;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	font-size: 0.8rem;
+	color: var(--slate-400);
+}
+
+/* ==========================================================================
+   13. واکنش‌گرایی (Responsive Breakpoints)
+   ========================================================================== */
+@media (max-width: 992px) {
+	.deraak-hero__grid,
+	.deraak-single-product__grid,
+	.deraak-contact-grid,
+	.deraak-footer__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.deraak-nav {
+		display: none;
+	}
+
+	.deraak-mobile-toggle {
+		display: inline-flex;
+	}
+}
+
+@media (max-width: 640px) {
+	.deraak-hero__stats,
+	.deraak-highlights-grid,
+	.deraak-form-row,
+	.deraak-catalog-toolbar__top {
+		grid-template-columns: 1fr;
+	}
+
+	.deraak-product-card__footer {
+		grid-template-columns: 1fr;
+	}
 }

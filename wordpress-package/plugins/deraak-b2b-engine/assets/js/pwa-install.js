@@ -1,5 +1,5 @@
 /**
- * Deraak PWA Install & Offline Controller
+ * Deraak PWA Install, Root-Scoped Service Worker Registration & Offline Catalog Toggle
  */
 
 (function () {
@@ -9,16 +9,12 @@
   var isInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   var isIOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
 
-  // 1. Register Service Worker
-  if ('serviceWorker' in navigator && window.deraakPWA) {
+  // 1. Register Root-Scoped Service Worker
+  if ('serviceWorker' in navigator && window.deraakPWA && window.deraakPWA.swUrl) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register(window.deraakPWA.swUrl, { scope: window.deraakPWA.scope || '/' })
-        .then(function (reg) {
-          console.log('Deraak SW registered successfully:', reg.scope);
-        })
-        .catch(function (err) {
-          console.warn('Deraak SW registration note:', err);
-        });
+      navigator.serviceWorker
+        .register(window.deraakPWA.swUrl, { scope: window.deraakPWA.scope || '/' })
+        .catch(function () {});
     });
   }
 
@@ -27,7 +23,9 @@
     e.preventDefault();
     deferredPrompt = e;
     var btn = document.getElementById('derak-pwa-install-btn');
-    if (btn) btn.style.display = 'inline-flex';
+    if (btn && !isInstalled) {
+      btn.style.display = 'inline-flex';
+    }
   });
 
   window.addEventListener('appinstalled', function () {
@@ -37,46 +35,63 @@
     if (btn) btn.style.display = 'none';
   });
 
-  // 3. Install Button Click Handler
+  // 3. Handle PWA Install, Sync & Offline Catalog Browse Buttons
   document.addEventListener('click', function (e) {
-    var btn = e.target.closest('#derak-pwa-install-btn');
-    if (!btn) return;
+    var target = e.target instanceof Element ? e.target : null;
+    if (!target) return;
 
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function (choice) {
-        if (choice.outcome === 'accepted') {
-          btn.style.display = 'none';
+    var installBtn = target.closest('#derak-pwa-install-btn');
+    if (installBtn) {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function (choice) {
+          if (choice.outcome === 'accepted') {
+            installBtn.style.display = 'none';
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        var label = document.getElementById('derak-pwa-sync-label');
+        if (label) {
+          label.textContent = isIOS
+            ? 'در سافاری آیفون: دکمه Share و سپس Add to Home Screen را بزنید.'
+            : 'از منوی مرورگر گزینه Install App / Add to Home Screen را انتخاب کنید.';
         }
-        deferredPrompt = null;
-      });
-    } else if (isIOS) {
-      alert('راهنمای نصب در آیفون (iOS Safari):\n\n۱. در پایین مرورگر سافاری روی دکمه اشتراک‌گذاری (Share) بزنید.\n۲. منو را اسکرول کرده و گزینه «Add to Home Screen» (افزودن به صفحه اصلی) را لمس کنید.\n۳. در بالای صفحه روی «Add» کلیک کنید.');
-    } else {
-      alert('اپلیکیشن دراک آماده کار است. در منوی مرورگر خود گزینه «Install App» یا «Add to Home screen» را انتخاب فرمایید.');
+      }
+      return;
     }
-  });
 
-  // 4. Sync Button Handler
-  document.addEventListener('click', function (e) {
-    var syncBtn = e.target.closest('#derak-pwa-sync-btn');
-    if (!syncBtn) return;
+    var syncBtn = target.closest('#derak-pwa-sync-btn');
+    if (syncBtn && window.DeraakCatalogDB) {
+      if (!navigator.onLine) {
+        var syncLbl = document.getElementById('derak-pwa-sync-label');
+        if (syncLbl) {
+          syncLbl.textContent = 'در حالت آفلاین امکان دریافت نسخه جدید از سرور وجود ندارد.';
+        }
+        return;
+      }
 
-    if (window.DeraakCatalogDB) {
       syncBtn.disabled = true;
-      syncBtn.innerHTML = '🔄 در حال دریافت کاتالوگ...';
+      syncBtn.textContent = 'در حال همگام‌سازی کاتالوگ...';
 
       window.DeraakCatalogDB.syncWithServer(function (success, count) {
         syncBtn.disabled = false;
         if (success) {
-          syncBtn.innerHTML = '✓ بروزرسانی شد (' + count + ' تجهیز)';
-          var label = document.getElementById('derak-pwa-sync-label');
-          if (label) label.textContent = 'کاتالوگ همگام‌سازی شد (' + count + ' مورد)';
+          syncBtn.textContent = 'همگام‌سازی انجام شد (' + count + ' تجهیز)';
         } else {
-          syncBtn.innerHTML = 'تلاش مجدد همگام‌سازی';
+          syncBtn.textContent = 'تلاش مجدد همگام‌سازی';
         }
       });
+      return;
+    }
+
+    var browseBtn = target.closest('#derak-pwa-browse-btn');
+    if (browseBtn) {
+      var panel = document.getElementById('derak-offline-catalog-panel');
+      if (panel) {
+        var isHidden = panel.style.display === 'none' || !panel.style.display;
+        panel.style.display = isHidden ? 'block' : 'none';
+      }
     }
   });
-
 })();

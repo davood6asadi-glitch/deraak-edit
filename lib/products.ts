@@ -13,6 +13,8 @@ export interface Product {
   leadTime: string
   specs: { label: string; value: string }[]
   description: string
+  destinationUrl: string
+  isDemo?: boolean
 }
 
 export const CATEGORIES: { id: 'all' | Category; label: string }[] = [
@@ -21,6 +23,10 @@ export const CATEGORIES: { id: 'all' | Category; label: string }[] = [
   { id: 'automation', label: 'اتوماسیون' },
 ]
 
+/**
+ * داده‌های نمونه آزمایشی (Demonstration Data)
+ * در محیط عملیاتی وردپرس، این اقلام از پایگاه داده ووکامرس فراخوانی می‌شوند.
+ */
 export const PRODUCTS: Product[] = [
   {
     id: 'pr-4116',
@@ -28,23 +34,23 @@ export const PRODUCTS: Product[] = [
     title: 'ترانسمیتر دما یونیورسال',
     brand: 'PR electronics',
     category: 'instrumentation',
-    status: 'موجود',
+    status: 'نمونه کاتالوگ',
     tag: 'DIN RAIL',
     image: '/products/pr-4116.png',
     params: [
-      { label: 'سنسور', value: 'RTD, TC, mV' },
+      { label: 'ورودی', value: 'RTD, TC, mV' },
       { label: 'خروجی', value: '4-20 mA' },
     ],
-    leadTime: 'موجود در انبار تهران - تحویل فوری',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'پروتکل', value: 'mA / VDC / Relay Out' },
-      { label: 'تغذیه', value: '21.6...253 VAC / 19.2...300 VDC' },
-      { label: 'دقت', value: 'بهتر از 0.05% بازه' },
-      { label: 'گواهی', value: 'SIL 2 / UL / DNV Marine' },
-      { label: 'دمای کاری', value: '-20°C … +60°C' },
+      { label: 'نوع سیگنال خروجی', value: 'mA / VDC / Relay' },
+      { label: 'محدوده تغذیه', value: '21.6...253 VAC / 19.2...300 VDC' },
+      { label: 'نصب', value: 'ریل استاندارد DIN' },
     ],
     description:
-      'مبدل یونیورسال سیگنال برای انواع ترموکوپل‌ها و سنسورهای RTD (Pt100, Ni100). مجهز به ایزولاسیون گالوانیک 2.3 kVAC چهارطرفه و پشتیبانی از ماژول نمایشگر جداشونده ۴۵۰۱ برای تنظیم سریع در سایت.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] مبدل سیگنال یونیورسال برای سنسورهای دما و مقاومت با قابلیت نصب روی ریل تابلویی.',
+    destinationUrl: 'https://deraak.com/?s=PR+4116',
+    isDemo: true,
   },
   {
     id: 'ifm-si5010',
@@ -52,23 +58,23 @@ export const PRODUCTS: Product[] = [
     title: 'فلو سوئیچ پایش جریان',
     brand: 'ifm electronic',
     category: 'instrumentation',
-    status: 'انبار تهران',
+    status: 'نمونه کاتالوگ',
     tag: 'FLOW',
     image: '/products/ifm-si5010.png',
     params: [
-      { label: 'محدوده', value: '3..300 cm/s' },
-      { label: 'بدنه', value: '316L SS' },
+      { label: 'بازه سنجش', value: '3..300 cm/s' },
+      { label: 'متریال بدنه', value: '316L SS' },
     ],
-    leadTime: 'تحویل ۲۴ ساعته در تهران',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'خروجی', value: 'PNP / NPN NO/NC' },
-      { label: 'تغذیه', value: '19...36 VDC' },
-      { label: 'فشار', value: 'تا 30 bar' },
-      { label: 'گواهی', value: 'IP67 / CE / cULus' },
-      { label: 'دمای کاری', value: '-25°C … +80°C' },
+      { label: 'نوع خروجی', value: 'PNP / NPN' },
+      { label: 'ولتاژ تغذیه', value: '19...36 VDC' },
+      { label: 'نشانگر', value: 'آرایه LED وضعیت جریان' },
     ],
     description:
-      'سنسور نظارت بر جریان مایعات و گازها بر اساس کالریمتری حرارتی، با بدنه یکپارچه استیل 316L و نشانگر LED چندرنگ برای نمایش وضعیت جریان.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] سنسور پایش جریان سیالات بر پایه اصل کالریمتری حرارتی با بدنه استنلس استیل.',
+    destinationUrl: 'https://deraak.com/?s=SI5010',
+    isDemo: true,
   },
   {
     id: 'eh-fmr53',
@@ -76,24 +82,23 @@ export const PRODUCTS: Product[] = [
     title: 'ترانسمیتر سطح راداری',
     brand: 'Endress+Hauser',
     category: 'instrumentation',
-    status: 'تحویل ۴۸ ساعته',
+    status: 'نمونه کاتالوگ',
     tag: 'RADAR',
     image: '/products/eh-fmr53.png',
     params: [
-      { label: 'فرکانس', value: '26 GHz' },
-      { label: 'برد', value: '40 m' },
+      { label: 'فرکانس کاری', value: 'K-Band' },
+      { label: 'کاربری', value: 'سنجش غیرتماسی سطح' },
     ],
-    leadTime: 'موجود در انبار تهران، ارسال ۴۸ ساعته به عسلویه',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'پروتکل', value: '4...20 mA HART / Profibus PA' },
-      { label: 'تغذیه', value: 'Loop powered 2-wire 24 VDC' },
-      { label: 'دقت', value: '±6 mm' },
-      { label: 'گواهی', value: 'ATEX Ex ia / IECEx / SIL 2' },
-      { label: 'دمای کاری', value: '-40°C … +200°C' },
-      { label: 'فشار', value: 'Vac...40 bar' },
+      { label: 'پروتکل ارتباطی', value: '4...20 mA HART' },
+      { label: 'تغذیه', value: '2-Wire Loop Powered' },
+      { label: 'نوع تجهیز', value: 'رادار فضای آزاد (Free-space)' },
     ],
     description:
-      'ترانسمیتر سطح راداری غیرتماسی برای مایعات و جامدات فله در مخازن، راکتورها و سیلوها با آنتن هورن و الگوریتم Multi-echo Tracking.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] ترانسمیتر سطح راداری غیرتماسی ویژه اندازه‌گیری پیوسته سطح مایعات در مخازن فرآیندی.',
+    destinationUrl: 'https://deraak.com/?s=FMR53',
+    isDemo: true,
   },
   {
     id: 'eh-cls13',
@@ -101,22 +106,22 @@ export const PRODUCTS: Product[] = [
     title: 'سنسور رسانایی‌سنجی',
     brand: 'Endress+Hauser',
     category: 'instrumentation',
-    status: 'موجود',
+    status: 'نمونه کاتالوگ',
     tag: 'ANALYTICAL',
     image: '/products/eh-cls13.png',
     params: [
-      { label: 'ویژگی', value: 'Autoclavable' },
-      { label: 'الکترود', value: 'Platinum' },
+      { label: 'نوع سنسور', value: 'Conductivity' },
+      { label: 'کاربرد', value: 'آب خالص و فرآیند' },
     ],
-    leadTime: 'موجود در انبار لاله‌زار',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'خروجی', value: 'Memosens / Analog' },
-      { label: 'سل ثابت', value: 'k = 0.01 cm⁻¹ / ±1%' },
-      { label: 'گواهی', value: 'EHEDG / FDA / USP Class VI' },
-      { label: 'فشار', value: '12 bar @ 150 °C' },
+      { label: 'فناوری سیگنال', value: 'Memosens / Analog' },
+      { label: 'ساختار الکترود', value: 'دو الکترودی هم‌محور' },
     ],
     description:
-      'سل رسانایی دو الکترودی بهداشتی برای آب خالص، WFI و صنایع داروسازی با الکترودهای پلاتین و اتصال تری‌کلمپ استیل 316L.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] سل رسانایی‌سنجی جهت پایش هدایت الکتریکی آب خالص و سیالات صنعتی.',
+    destinationUrl: 'https://deraak.com/?s=CLS13',
+    isDemo: true,
   },
   {
     id: 'pr-9106b',
@@ -124,21 +129,22 @@ export const PRODUCTS: Product[] = [
     title: 'ریپیتر و ایزولاتور HART',
     brand: 'PR electronics',
     category: 'automation',
-    status: 'سفارشی',
-    tag: 'SIL 2 / SIL 3',
+    status: 'نمونه کاتالوگ',
+    tag: 'ISOLATOR',
     image: '/products/pr-9106b.png',
     params: [
-      { label: 'ایزولاسیون', value: '2.6 kVAC' },
-      { label: 'استاندارد', value: 'ATEX / IECEx' },
+      { label: 'سیگنال', value: '4-20 mA / HART' },
+      { label: 'نوع تجهیز', value: 'Barrier / Isolator' },
     ],
-    leadTime: 'تحویل سفارشی ۱۵ روز کاری',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'پروتکل', value: 'HART Transparent 2-Way' },
-      { label: 'تغذیه', value: '19.2...31.2 VDC' },
-      { label: 'گواهی', value: 'SIL 2 / SIL 3 / ATEX Zone 0/1' },
+      { label: 'پروتکل عبوری', value: 'HART Transparent' },
+      { label: 'تغذیه نامی', value: '24 VDC' },
     ],
     description:
-      'بریر ایزولاتور دوکاناله ایمنی ذاتی برای تغذیه و انتقال سیگنال 4-20 mA ترانسمیترهای دوسیمه در مناطق پرخطر Zone 0 و Zone 1.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] ایزولاتور و بریر انتقال سیگنال ترانسمیترهای دو سیمه در تابلوهای کنترل صنعتی.',
+    destinationUrl: 'https://deraak.com/?s=PR+9106B',
+    isDemo: true,
   },
   {
     id: 'pr-5116b',
@@ -146,21 +152,22 @@ export const PRODUCTS: Product[] = [
     title: 'فرستنده قابل برنامه‌ریزی',
     brand: 'PR electronics',
     category: 'automation',
-    status: 'موجود',
+    status: 'نمونه کاتالوگ',
     tag: 'CONVERTER',
     image: '/products/pr-5116b.png',
     params: [
-      { label: 'ورودی', value: 'RTD / Ω' },
+      { label: 'ورودی', value: 'RTD / TC / mA / V' },
       { label: 'تغذیه', value: '24 VDC' },
     ],
-    leadTime: 'موجود در انبار تهران',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'خروجی', value: 'V/mA / Relay' },
-      { label: 'تغذیه', value: '24 VDC ±20%' },
-      { label: 'گواهی', value: 'UL / CSA / CE' },
+      { label: 'خروجی', value: 'Current / Voltage / Relay' },
+      { label: 'نصب', value: 'DIN Rail' },
     ],
     description:
-      'محاسبه‌گر و مبدل سیگنال برنامه‌پذیر برای جمع، تفریق، ضرب و رادیکال سیگنال‌ها و خطی‌سازی مخازن استوانه‌ای افقی.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] مبدل سیگنال قابل برنامه‌ریزی جهت ایزولاسیون و تبدیل سیگنال‌های آنالوگ صنعتی.',
+    destinationUrl: 'https://deraak.com/?s=PR+5116B',
+    isDemo: true,
   },
   {
     id: 'eh-fdu95',
@@ -168,21 +175,22 @@ export const PRODUCTS: Product[] = [
     title: 'سنسور سطح اولتراسونیک',
     brand: 'Endress+Hauser',
     category: 'instrumentation',
-    status: 'سفارش ویژه',
+    status: 'نمونه کاتالوگ',
     tag: 'ULTRASONIC',
     image: '/products/eh-fdu95.png',
     params: [
-      { label: 'برد', value: '45 m' },
-      { label: 'ضدانفجار', value: 'Ex-proof' },
+      { label: 'فناوری', value: 'Ultrasonic' },
+      { label: 'کاربرد', value: 'سیلو و مواد فله' },
     ],
-    leadTime: 'سفارش مهندسی، همراه مدارک تست بازرسی',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'سازگاری', value: 'FMU90 / FMU95' },
-      { label: 'جبران‌سازی', value: 'سنسور دمای داخلی' },
-      { label: 'گواهی', value: 'ATEX Ex ta/tb IIIC / IECEx' },
+      { label: 'ترانسمیتر سازگار', value: 'Prosonic FMU90' },
+      { label: 'سنسور دما', value: 'داخلی جهت تصحیح زمان پرواز موج' },
     ],
     description:
-      'سنسور اولتراسونیک برای سیلوهای بلند پودر، سیمان، گرانول و غلات تا ۴۵ متر با گرم‌کن خودکار ضد یخ‌زدگی.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] سنسور سطح اولتراسونیک غیرتماسی برای اندازه‌گیری سطح مواد جامد فله، پودر و مایعات.',
+    destinationUrl: 'https://deraak.com/?s=FDU95',
+    isDemo: true,
   },
   {
     id: 'eh-fmp54',
@@ -190,32 +198,31 @@ export const PRODUCTS: Product[] = [
     title: 'لول ترانسمیتر موج هدایت‌شده',
     brand: 'Endress+Hauser',
     category: 'instrumentation',
-    status: 'انبار تهران',
+    status: 'نمونه کاتالوگ',
     tag: 'GWR',
     image: '/products/eh-fmp54.png',
     params: [
-      { label: 'فشار', value: '400 bar' },
-      { label: 'دما', value: '450 °C' },
+      { label: 'فناوری', value: 'Guided Radar' },
+      { label: 'پروتکل', value: 'HART / Fieldbus' },
     ],
-    leadTime: 'موجود در انبار تهران',
+    leadTime: 'داده نمونه آزمایشی — استعلام وضعیت از واحد فروش',
     specs: [
-      { label: 'پروتکل', value: '4...20 mA HART / FF' },
+      { label: 'خروجی', value: '4...20 mA HART' },
       { label: 'تغذیه', value: '2-Wire Loop Powered' },
-      { label: 'دقت', value: '±2 mm' },
-      { label: 'گواهی', value: 'ATEX / IECEx / SIL 2 / SIL 3' },
-      { label: 'دمای کاری', value: '-196°C … +450°C' },
     ],
     description:
-      'لول ترانسمیتر رادار هدایت‌شده برای شرایط فرآیندی حاد در پتروشیمی، بویلرهای فشار بالا و ستون‌های تقطیر.',
+      '[رکورد نمونه آزمایشی جهت نمایش ساختار کاتالوگ] لول ترانسمیتر رادار موج هدایت‌شده (GWR) جهت اندازه‌گیری سطح مایعات در شرایط فرآیندی.',
+    destinationUrl: 'https://deraak.com/?s=FMP54',
+    isDemo: true,
   },
 ]
 
 export const BRANDS = [
-  { name: 'Endress+Hauser', desc: 'اندازه‌گیری سطح، فشار و دبی', count: 18 },
-  { name: 'PR electronics', desc: 'سیگنال کاندیشنر و بریر ایمنی ذاتی', count: 11 },
-  { name: 'ifm electronic', desc: 'سنسورهای صنعتی و پایش وضعیت', count: 9 },
-  { name: 'WIKA', desc: 'تجهیزات اندازه‌گیری فشار و دما', count: 5 },
-  { name: 'Siemens', desc: 'اتوماسیون فرآیند و درایو', count: 2 },
+  { name: 'Endress+Hauser', desc: 'تجهیزات اندازه‌گیری سطح، فشار، دبی و آنالیتیکال', count: 4 },
+  { name: 'PR electronics', desc: 'سیگنال کاندیشنر، مبدل دما و ایزولاتورهای تابلویی', count: 3 },
+  { name: 'ifm electronic', desc: 'سنسورهای صنعتی پایش جریان، فشار و موقعیت', count: 1 },
+  { name: 'WIKA', desc: 'تجهیزات اندازه‌گیری فشار و دمای فرآیندی', count: 0 },
+  { name: 'Siemens', desc: 'اتوماسیون فرآیند و ابزار دقیق صنعتی', count: 0 },
 ]
 
 export const CONTACT = {

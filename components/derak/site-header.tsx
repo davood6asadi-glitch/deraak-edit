@@ -1,6 +1,7 @@
 'use client'
 
-import { ClipboardList, Phone } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ClipboardList, Moon, Phone, Sun } from 'lucide-react'
 import { CONTACT } from '@/lib/products'
 import { useInquiry } from './inquiry-provider'
 
@@ -13,6 +14,42 @@ const NAV = [
 
 export function SiteHeader() {
   const { items, setOpen } = useInquiry()
+  const [darkMode, setDarkMode] = useState(false)
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('deraak-theme-mode')
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark')
+        document.documentElement.setAttribute('data-theme', 'dark')
+        setDarkMode(true)
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }, [])
+
+  const toggleDarkMode = () => {
+    const nextDark = !darkMode
+    setDarkMode(nextDark)
+    if (nextDark) {
+      document.documentElement.classList.add('dark')
+      document.documentElement.setAttribute('data-theme', 'dark')
+      try {
+        localStorage.setItem('deraak-theme-mode', 'dark')
+      } catch {
+        // ignore
+      }
+    } else {
+      document.documentElement.classList.remove('dark')
+      document.documentElement.setAttribute('data-theme', 'light')
+      try {
+        localStorage.setItem('deraak-theme-mode', 'light')
+      } catch {
+        // ignore
+      }
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/95 text-ink-foreground backdrop-blur">
@@ -53,6 +90,17 @@ export function SiteHeader() {
             <Phone className="size-4" aria-hidden />
             {CONTACT.phoneLabel}
           </a>
+
+          <button
+            type="button"
+            onClick={toggleDarkMode}
+            className="inline-flex size-10 items-center justify-center rounded-md border border-white/15 bg-white/5 text-accent transition hover:bg-white/10"
+            aria-label={darkMode ? 'تغییر به حالت روشن' : 'تغییر به حالت تیره'}
+            title={darkMode ? 'حالت روشن' : 'حالت تیره'}
+          >
+            {darkMode ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
+          </button>
+
           <button
             type="button"
             onClick={() => setOpen(true)}

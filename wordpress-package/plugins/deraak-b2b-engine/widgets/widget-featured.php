@@ -1,6 +1,7 @@
 <?php
 /**
  * Elementor Widget: Deraak Featured Products Carousel
+ * Safe with or without WooCommerce active
  *
  * @package Deraak_B2B_Engine
  */
@@ -41,7 +42,7 @@ class Deraak_Widget_Featured extends Widget_Base {
             array(
                 'label'   => 'عنوان بخش',
                 'type'    => Controls_Manager::TEXT,
-                'default' => 'محصولات منتخب مهندسی',
+                'default' => 'تجهیزات کاتالوگ مهندسی',
             )
         );
 
@@ -50,7 +51,7 @@ class Deraak_Widget_Featured extends Widget_Base {
             array(
                 'label'   => 'تعداد محصولات',
                 'type'    => Controls_Manager::NUMBER,
-                'default' => 6,
+                'default' => 8,
             )
         );
 
@@ -60,7 +61,7 @@ class Deraak_Widget_Featured extends Widget_Base {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
-        $per_page = absint(isset($settings['posts_per_page']) ? $settings['posts_per_page'] : 6);
+        $per_page = absint(isset($settings['posts_per_page']) ? $settings['posts_per_page'] : 8);
         $per_page = max(1, min(24, $per_page));
 
         $args = array(
@@ -71,37 +72,36 @@ class Deraak_Widget_Featured extends Widget_Base {
         );
 
         $query = new WP_Query($args);
-        $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop');
+        $shop_url = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : get_post_type_archive_link('product');
         ?>
         <section class="derak-featured-section" style="margin:20px 0;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <div style="display:flex; align-items:center; gap:6px;">
-                    <span style="font-size:18px;">⭐</span>
-                    <h2 style="font-size:16px; font-weight:800; color:var(--derak-primary); margin:0;">
-                        <?php echo esc_html($settings['title']); ?>
-                    </h2>
-                </div>
-                <a href="<?php echo esc_url($shop_url); ?>" style="font-size:12px; color:var(--derak-blue-vibrant); font-weight:700; text-decoration:none;">
-                    مشاهده همه کاتالوگ ←
-                </a>
+                <h2 style="font-size:17px; font-weight:700; color:var(--derak-primary); margin:0;">
+                    <?php echo esc_html($settings['title']); ?>
+                </h2>
+                <?php if ($shop_url) : ?>
+                    <a href="<?php echo esc_url($shop_url); ?>" style="font-size:13px; color:var(--derak-blue-vibrant); font-weight:700; text-decoration:none;">
+                        مشاهده همه کاتالوگ ←
+                    </a>
+                <?php endif; ?>
             </div>
 
             <?php if ($query->have_posts()) : ?>
-                <div style="display:flex; gap:14px; overflow-x:auto; padding-bottom:12px; scrollbar-width:none;" class="derak-brands-row">
+                <div class="derak-products-grid">
                     <?php
                     while ($query->have_posts()) :
                         $query->the_post();
-                        ?>
-                        <div style="min-width:275px; max-width:285px; flex-shrink:0;">
-                            <?php wc_get_template_part('content', 'product'); ?>
-                        </div>
-                        <?php
+                        if (function_exists('wc_get_template_part')) {
+                            wc_get_template_part('content', 'product');
+                        } else {
+                            get_template_part('woocommerce/content', 'product');
+                        }
                     endwhile;
                     wp_reset_postdata();
                     ?>
                 </div>
             <?php else : ?>
-                <p style="font-size:13px; color:var(--derak-stone-muted);">محصولی یافت نشد.</p>
+                <p style="font-size:13px; color:var(--derak-stone-muted);">هنوز محصولی در کاتالوگ ثبت نشده است.</p>
             <?php endif; ?>
         </section>
         <?php
